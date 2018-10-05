@@ -20,4 +20,6 @@ public class CatalogActivity extends AppCompatActivity {
         mComixDbHelper=new ComixDbHelper(this);
 
     }
+
+
 }
