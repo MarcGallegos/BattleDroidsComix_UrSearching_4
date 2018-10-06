@@ -51,6 +51,7 @@ public final class ComiContract {
          */
         public final static String COLUMN_SECTION="section";
 
+        //Values possible for COLUMN_SECTION
         public static final int SECTION_UNKNOWN=0;
         public static final int SECTION_DC=1;
         public static final int SECTION_MARVEL=2;
@@ -58,7 +59,7 @@ public final class ComiContract {
         public static final int SECTION_DARK_HORSE=4;
         public static final int SECTION_MAD=5;
         public static final int SECTION_LEGACY=6;
-        public static final int SECTION_INTERNATIONAL=8;
+        public static final int SECTION_INTERNATIONAL=7;
 
     }
 }
