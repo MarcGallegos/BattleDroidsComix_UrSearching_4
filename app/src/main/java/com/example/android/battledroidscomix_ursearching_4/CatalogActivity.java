@@ -24,12 +24,14 @@ public class CatalogActivity extends AppCompatActivity {
         setContentView(R.layout.activity_catalog);
 
         //Setup FAB to open EditorActivity
-//        FloatingActionButton fab=(FloatingActionButton)findViewById(R.id.fab);
-//        fab.setOnClickListener((View.OnClickListener) (view) {
-//            Intent intent=new Intent(CatalogActivity.this, EditorActivity.class);
-//            startActivity(intent);
-                //}
-//                );
+        FloatingActionButton fab=(FloatingActionButton)findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // To access our database, we instantiate our SQLiteOpenHelper subclass and pass the
         // context, which is the current activity.
@@ -45,23 +47,23 @@ public class CatalogActivity extends AppCompatActivity {
     /**
      * Temporary helper method to display information in the onscreen TextView about the DB state.
      */
-    private void displayDatabaseInfo(){
+    private void displayDatabaseInfo() {
         //Create and/or open a database a database to read from it.
-        SQLiteDatabase db=mComixDbHelper.getReadableDatabase();
+        SQLiteDatabase db = mComixDbHelper.getReadableDatabase();
 
         //Define a projection that specifies which columns from the items database you will use after
         //this query.
-        String[] projection={
+        String[] projection = {
                 TitleEntry._ID,
                 TitleEntry.COLUMN_PRODUCT_NAME,
                 TitleEntry.COLUMN_SUPPLIER,
                 TitleEntry.COLUMN_SUPPLIER_PH,
                 TitleEntry.COLUMN_PRICE,
                 TitleEntry.COLUMN_QTY,
-                TitleEntry.COLUMN_SECTION };
+                TitleEntry.COLUMN_SECTION};
 
         //Perform query on the items database table
-        Cursor cursor=db.query(
+        Cursor cursor = db.query(
                 TitleEntry.TABLE_NAME,      //The table to query
                 projection,                 //The Columns to return
                 null,                       //The columns for the WHERE clause
@@ -70,9 +72,9 @@ public class CatalogActivity extends AppCompatActivity {
                 null,                        //Don't filter by row groups
                 null);                      //The sort order
 
-        TextView displayView=(TextView)findViewById(R.id.txt_vu_item);
+        TextView displayView = (TextView) findViewById(R.id.txt_vu_item);
 
-        try{
+        try {
             //Create header in TextView that looks like this:
             //
             //The items table contains <number of rows in Cursor> pets.
@@ -82,55 +84,57 @@ public class CatalogActivity extends AppCompatActivity {
             //information from each column in following order.
             displayView.setText(getString(R.string.table_int_header));
             displayView.append(TitleEntry._ID + " - " +
-            TitleEntry.COLUMN_PRODUCT_NAME + " - " +
-            TitleEntry.COLUMN_SUPPLIER + " - " +
-            TitleEntry.COLUMN_SUPPLIER_PH + " - " +
-            TitleEntry.COLUMN_PRICE + " - " +
-            TitleEntry.COLUMN_QTY + " - " +
-            TitleEntry.COLUMN_SECTION + "\n");
+                    TitleEntry.COLUMN_PRODUCT_NAME + " - " +
+                    TitleEntry.COLUMN_SUPPLIER + " - " +
+                    TitleEntry.COLUMN_SUPPLIER_PH + " - " +
+                    TitleEntry.COLUMN_PRICE + " - " +
+                    TitleEntry.COLUMN_QTY + " - " +
+                    TitleEntry.COLUMN_SECTION + "\n");
 
             //Find/Bind index of each column.
-            int idColumnIndex=cursor.getColumnIndex(TitleEntry._ID);
-            int nameColumnIndex=cursor.getColumnIndex(TitleEntry.COLUMN_PRODUCT_NAME);
-            int supplColumnIndex=cursor.getColumnIndex(TitleEntry.COLUMN_SUPPLIER);
-            int suppPhColumnIndex=cursor.getColumnIndex(TitleEntry.COLUMN_SUPPLIER_PH);
-            int priceColumnIndex=cursor.getColumnIndex(TitleEntry.COLUMN_PRICE);
-            int quantColumnIndex=cursor.getColumnIndex(TitleEntry.COLUMN_QTY);
-            int sectColumnIndex=cursor.getColumnIndex(TitleEntry.COLUMN_SECTION);
+            int idColumnIndex = cursor.getColumnIndex(TitleEntry._ID);
+            int nameColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_PRODUCT_NAME);
+            int supplColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_SUPPLIER);
+            int suppPhColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_SUPPLIER_PH);
+            int priceColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_PRICE);
+            int quantColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_QTY);
+            int sectColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_SECTION);
 
             //Iterate thru all returned rows in cursor.
             while (cursor.moveToNext()) {
                 //Use that index to extract string or Int value of the word @ current row
                 //cursor is on.
-                int currentId=cursor.getInt(idColumnIndex);
-                String currentName=cursor.getString(nameColumnIndex);
-                String currentSupplier=cursor.getString(supplColumnIndex);
-                String currentSuppPh=cursor.getString(suppPhColumnIndex);
-                String currentPrice=cursor.getString(priceColumnIndex);
-                String currentQty=cursor.getString(quantColumnIndex);
-                String currentSect=cursor.getString(sectColumnIndex);
-            //Display the values from each respective current column of the current row in the
-            // cursor in the TextView.
-            displayView.append(("\n" + currentId + " - " +
-            currentName + " - " +
-            currentSupplier + " - " +
-            currentSuppPh + " - " +
-            currentPrice + " - " +
-            currentQty + " - " +
-            currentSect));
+                int currentId = cursor.getInt(idColumnIndex);
+                String currentName = cursor.getString(nameColumnIndex);
+                String currentSupplier = cursor.getString(supplColumnIndex);
+                String currentSuppPh = cursor.getString(suppPhColumnIndex);
+                String currentPrice = cursor.getString(priceColumnIndex);
+                String currentQty = cursor.getString(quantColumnIndex);
+                String currentSect = cursor.getString(sectColumnIndex);
+                //Display the values from each respective current column of the current row in the
+                // cursor in the TextView.
+                displayView.append(("\n" + currentId + " - " +
+                        currentName + " - " +
+                        currentSupplier + " - " +
+                        currentSuppPh + " - " +
+                        currentPrice + " - " +
+                        currentQty + " - " +
+                        currentSect));
             }
-        }finally{
+        } finally {
             //Always close the cursor when done reading from it. This releases all it's resources
             //and makes it invalid.
             cursor.close();
         }
+        insertItem();
+    }
 
         /**
          * Helper method to insert hardcoded item data into database, for debugging purposes only.
          */
         private void insertItem() {
             //Gets database into the write mode
-            SQLiteDatabase db = mComixDbHelper.getWritableDatabase();
+            SQLiteDatabase database = mComixDbHelper.getWritableDatabase();
 
             //Create a ContentValues object where column names are the keys, and misc schwag's item
             //attributes are it's values.
@@ -150,8 +154,8 @@ public class CatalogActivity extends AppCompatActivity {
              * a new row when there are no values.
              * The 3rd argument is the ContentValues object containing Superman #1's information.
              */
-            long newRowId=db.insert(TitleEntry.TABLE_NAME,null ,values);
-            }
+            long newRowId=database.insert(TitleEntry.TABLE_NAME,null ,values);
+        }
     }
 
-}
+
