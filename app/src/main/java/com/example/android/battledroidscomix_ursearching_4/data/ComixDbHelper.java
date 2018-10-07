@@ -28,12 +28,12 @@ public class ComixDbHelper extends SQLiteOpenHelper{
         //Create a string that contains the SQL statement to create the items table.
         String SQL_CREATE_ITEMS_TABLE = "CREATE TABLE " + TitleEntry.TABLE_NAME + " ("
                 + TitleEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + TitleEntry.COLUMN_PRODUCT_NAME + "TEXT NOT NULL, "
-                + TitleEntry.COLUMN_SUPPLIER + "TEXT NOT NULL, "
-                + TitleEntry.COLUMN_SUPPLIER_PH + "INTEGER NOT NULL, "
-                + TitleEntry.COLUMN_PRICE + "INTEGER NOT NULL DEFAULT 0, "
-                + TitleEntry.COLUMN_QTY + "INTEGER NOT NULL DEFAULT 0, "
-                + TitleEntry.COLUMN_SECTION + "TEXT NOT NULL );";
+                + TitleEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
+                + TitleEntry.COLUMN_SUPPLIER + " TEXT NOT NULL, "
+                + TitleEntry.COLUMN_SUPPLIER_PH + " TEXT NOT NULL, "
+                + TitleEntry.COLUMN_PRICE + " REAL NOT NULL DEFAULT 0, "
+                + TitleEntry.COLUMN_QTY + " INTEGER NOT NULL DEFAULT 0, "
+                + TitleEntry.COLUMN_SECTION + " INTEGER NOT NULL );";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_ITEMS_TABLE);

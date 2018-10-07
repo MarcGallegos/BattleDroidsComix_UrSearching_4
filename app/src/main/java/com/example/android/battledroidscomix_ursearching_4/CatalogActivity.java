@@ -110,8 +110,8 @@ public class CatalogActivity extends AppCompatActivity {
                 String currentSupplier = cursor.getString(supplColumnIndex);
                 String currentSuppPh = cursor.getString(suppPhColumnIndex);
                 String currentPrice = cursor.getString(priceColumnIndex);
-                String currentQty = cursor.getString(quantColumnIndex);
-                String currentSect = cursor.getString(sectColumnIndex);
+                int currentQty = cursor.getInt(quantColumnIndex);
+                int currentSect = cursor.getInt(sectColumnIndex);
                 //Display the values from each respective current column of the current row in the
                 // cursor in the TextView.
                 displayView.append(("\n" + currentId + " - " +
