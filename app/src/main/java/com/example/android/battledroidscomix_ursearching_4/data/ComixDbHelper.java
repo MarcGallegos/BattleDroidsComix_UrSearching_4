@@ -32,7 +32,8 @@ public class ComixDbHelper extends SQLiteOpenHelper{
                 + TitleEntry.COLUMN_SUPPLIER + "TEXT NOT NULL, "
                 + TitleEntry.COLUMN_SUPPLIER_PH + "INTEGER NOT NULL, "
                 + TitleEntry.COLUMN_PRICE + "INTEGER NOT NULL DEFAULT 0, "
-                + TitleEntry.COLUMN_QTY + "INTEGER NOT NULL DEFAULT 0);";
+                + TitleEntry.COLUMN_QTY + "INTEGER NOT NULL DEFAULT 0, "
+                + TitleEntry.COLUMN_SECTION + "TEXT NOT NULL );";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_ITEMS_TABLE);
