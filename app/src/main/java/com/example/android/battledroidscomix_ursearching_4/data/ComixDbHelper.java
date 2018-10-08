@@ -3,6 +3,8 @@ package com.example.android.battledroidscomix_ursearching_4.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry;
 
 public class ComixDbHelper extends SQLiteOpenHelper{
@@ -35,6 +37,7 @@ public class ComixDbHelper extends SQLiteOpenHelper{
                 + TitleEntry.COLUMN_QTY + " INTEGER NOT NULL DEFAULT 0, "
                 + TitleEntry.COLUMN_SECTION + " INTEGER NOT NULL );";
 
+        Log.v("Database",SQL_CREATE_ITEMS_TABLE);
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_ITEMS_TABLE);
     }

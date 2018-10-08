@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,7 +18,7 @@ import com.example.android.battledroidscomix_ursearching_4.data.ComixDbHelper;
 
 public class CatalogActivity extends AppCompatActivity {
 
-    //database helper provides access to database
+    //Database Helper provides access to database
     private ComixDbHelper mComixDbHelper;
 
     @Override
@@ -83,7 +85,7 @@ public class CatalogActivity extends AppCompatActivity {
             //
             //In the WHILE loop below, iterate through the rows of the cursor and display the
             //information from each column in following order.
-            displayView.setText(getString(R.string.table_int_header));
+            displayView.setText("The items table contains " + cursor.getCount() + " items. \n\n");
             displayView.append(TitleEntry._ID + " - " +
                     TitleEntry.COLUMN_PRODUCT_NAME + " - " +
                     TitleEntry.COLUMN_SUPPLIER + " - " +
@@ -127,7 +129,6 @@ public class CatalogActivity extends AppCompatActivity {
             //and makes it invalid.
             cursor.close();
         }
-        insertItem();
     }
 
         /**
@@ -156,6 +157,31 @@ public class CatalogActivity extends AppCompatActivity {
              * The 3rd argument is the ContentValues object containing Superman #1's information.
              */
             long newRowId=database.insert(TitleEntry.TABLE_NAME,null ,values);
+        }
+
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu){
+            //Inflate menu options in the app bar overflow menu
+            getMenuInflater().inflate(R.menu.menu_catalog,menu );
+            //Add menu items to app bar
+            return true;
+            }
+
+         @Override
+        public boolean onOptionsItemSelected(MenuItem item){
+            //User selected menu option in app bar overflow menu
+             switch(item.getItemId()){
+                 //Respond to "Insert Dummy Data" menu item selection
+                 case R.id.action_insert_dummy_data:
+                     insertItem();
+                     displayDatabaseInfo();
+                     return true;
+                 //Respond to "Delete ALL Database Entries" menu item selection
+                 case R.id.action_delete_all_entries:
+                    //Do nothing for this stage. Will call to yet-to-be created delete method.
+                    return true;
+             }
+             return super.onOptionsItemSelected(item);
         }
     }
 

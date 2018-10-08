@@ -10,6 +10,7 @@
         android:id="@+id/txt_vu_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:textSize="12sp"
         android:padding="16dp"/>
 
     <android.support.design.widget.FloatingActionButton
