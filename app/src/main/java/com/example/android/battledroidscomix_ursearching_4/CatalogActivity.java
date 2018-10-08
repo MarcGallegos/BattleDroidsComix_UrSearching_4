@@ -26,16 +26,6 @@ public class CatalogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
-    //Setup FAB to open EditorActivity
-    FloatingActionButton fab=(FloatingActionButton)findViewById(R.id.fab);
-    fab.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
-            startActivity(intent);
-        }
-    });
-
         // To access our database, we instantiate our SQLiteOpenHelper subclass and pass the
         // context, which is the current activity.
         mComixDbHelper=new ComixDbHelper(this);
@@ -46,6 +36,34 @@ public class CatalogActivity extends AppCompatActivity {
         super.onStart();
         displayDatabaseInfo();
     }
+
+        /**
+         * Helper method to insert hardcoded item data into database, for debugging purposes only.
+         */
+        private void insertItem() {
+            //Gets database into the write mode
+            SQLiteDatabase database = mComixDbHelper.getWritableDatabase();
+
+            //Create a ContentValues object where column names are the keys, and misc schwag's item
+            //attributes are it's values.
+            ContentValues values=new ContentValues();
+            values.put(TitleEntry.COLUMN_PRODUCT_NAME,"Superman #1");
+            values.put(TitleEntry.COLUMN_SUPPLIER,"Comic World");
+            values.put(TitleEntry.COLUMN_SUPPLIER_PH,5551234);
+            values.put(TitleEntry.COLUMN_PRICE,19999);
+            values.put(TitleEntry.COLUMN_QTY,1 );
+            values.put(TitleEntry.COLUMN_SECTION,2 );
+
+            /**
+             * Insert new row for Superman #1 in the database, returning the id of that new row.
+             * The first arg for {@link db.insert()} is the items table name.
+             * The 2nd arg provides the column name in which the framework can insert NULL in the
+             * event the ContentView is empty. (If this is set NULL, the framework will not insert
+             * a new row when there are no values.
+             * The 3rd argument is the ContentValues object containing Superman #1's information.
+             */
+            long newRowId=database.insert(TitleEntry.TABLE_NAME,null ,values);
+        }
 
     /**
      * Temporary helper method to display information in the onscreen TextView about the DB state.
@@ -130,34 +148,6 @@ public class CatalogActivity extends AppCompatActivity {
             cursor.close();
         }
     }
-
-        /**
-         * Helper method to insert hardcoded item data into database, for debugging purposes only.
-         */
-        private void insertItem() {
-            //Gets database into the write mode
-            SQLiteDatabase database = mComixDbHelper.getWritableDatabase();
-
-            //Create a ContentValues object where column names are the keys, and misc schwag's item
-            //attributes are it's values.
-            ContentValues values=new ContentValues();
-            values.put(TitleEntry.COLUMN_PRODUCT_NAME,"Superman #1");
-            values.put(TitleEntry.COLUMN_SUPPLIER,"Comic World");
-            values.put(TitleEntry.COLUMN_SUPPLIER_PH,5551234);
-            values.put(TitleEntry.COLUMN_PRICE,19999);
-            values.put(TitleEntry.COLUMN_QTY,1 );
-            values.put(TitleEntry.COLUMN_SECTION,2 );
-
-            /**
-             * Insert new row for Superman #1 in the database, returning the id of that new row.
-             * The first arg for {@link db.insert()} is the items table name.
-             * The 2nd arg provides the column name in which the framework can insert NULL in the
-             * event the ContentView is empty. (If this is set NULL, the framework will not insert
-             * a new row when there are no values.
-             * The 3rd argument is the ContentValues object containing Superman #1's information.
-             */
-            long newRowId=database.insert(TitleEntry.TABLE_NAME,null ,values);
-        }
 
         @Override
         public boolean onCreateOptionsMenu(Menu menu){
