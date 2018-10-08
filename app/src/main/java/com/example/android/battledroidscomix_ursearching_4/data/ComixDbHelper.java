@@ -44,8 +44,12 @@ public class ComixDbHelper extends SQLiteOpenHelper{
 
     /** This is called when the database needs to be upgraded. */
     @Override
-    public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion){
-        //Nothing to do here yet, database is still at version 1.
+    public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion) {
+        if (newVersion > oldVersion) {
+            //Do Nothing For Now as app is still version 1.
+
+        }
     }
+
 
 }

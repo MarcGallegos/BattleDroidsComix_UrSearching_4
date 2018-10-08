@@ -62,7 +62,7 @@ public class CatalogActivity extends AppCompatActivity {
              * a new row when there are no values.
              * The 3rd argument is the ContentValues object containing Superman #1's information.
              */
-            long newRowId=database.insert(TitleEntry.TABLE_NAME,null ,values);
+            database.insert(TitleEntry.TABLE_NAME,null ,values);
         }
 
     /**
