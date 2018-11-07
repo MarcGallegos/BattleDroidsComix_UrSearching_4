@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string-array name="array_section_options">
+        <item>@string/section_misc_merch</item>
+        <item>@string/section_action</item>
+        <item>@string/section_manga</item>
+        <item>@string/section_horror</item>
+        <item>@string/section_drama</item>
+        <item>@string/section_fantasy</item>
+        <item>@string/section_sci_fi</item>
+    </string-array>
+
+</resources>

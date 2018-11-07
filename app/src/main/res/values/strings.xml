@@ -1,6 +1,26 @@
 <resources>
-    <string name="app_name">JediDroidz_ComixUrSearching4</string>
-    <string name="category_overview">Overview</string>
-    <string name="action_insert_dummy_data">Insert Dummy Data</string>
+    <string name="app_name">JediDroidz comixStore</string>
+    <string name="category_overview">Edit Product Overview</string>
+    //Menu Strings for menus
+    <string name="action_insert_dummy_data">Insert Placeholder Data Row</string>
     <string name="action_delete_all_entries">Delete ALL Database Entries</string>
+    <string name="action_save">Save</string>
+    <string name="action_delete">Delete</string>
+    //Editor EditText Hint Strings to instruct user on DB entry
+    <string name="hint_product_name">Enter Product Name</string>
+    <string name="hint_supplier">Enter Supplier</string>
+    <string name="hint_supplier_ph">Enter Supplier Phone#</string>
+    <string name="hint_price">Enter Price</string>
+    <string name="hint_qty">Enter Qty In-Stock</string>
+    //Editor Spinner Strings to display in dropdown
+    <string name="hint_section">Choose Section</string>
+    //Strings for array_section_options
+    <string name="section_misc_merch">Misc. Merch</string>
+    <string name="section_action">Action</string>
+    <string name="section_manga">Manga/Anime</string>
+    <string name="section_horror">Horror</string>
+    <string name="section_drama">Drama</string>
+    <string name="section_fantasy">Fantasy</string>
+    <string name="section_sci_fi">Sci-Fi</string>
+
 </resources>

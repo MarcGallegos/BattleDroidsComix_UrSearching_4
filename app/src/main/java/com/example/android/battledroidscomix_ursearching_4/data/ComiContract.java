@@ -1,8 +1,22 @@
 package com.example.android.battledroidscomix_ursearching_4.data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public final class ComiContract {
+
+    /**
+     * URI CONTENT_AUTHORITY String Constant
+     */
+    public static final String CONTENT_AUTHORITY="com.example.battledroidscomix_ursearching4";
+    /**
+     * URI Scheme String Constant
+     */
+    public static final Uri BASE_CONTENT_URI=Uri.parse("content://" + CONTENT_AUTHORITY);
+    /**
+     * URI PATH_Tablename Constant
+     */
+    public static final String PATH_ITEMS = "items";
 
     // private empty constructor to prevent accidental instantiation of Contract Class.
     private ComiContract(){}
@@ -12,6 +26,9 @@ public final class ComiContract {
      * Each entry in the table represents a single title.
      */
     public static final class TitleEntry implements BaseColumns{
+
+        /** The content URI to access the item data in the ComixProvider*/
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI,PATH_ITEMS );
 
         /**Name of database table for items*/
         public final static String TABLE_NAME="items";
@@ -50,6 +67,16 @@ public final class ComiContract {
          * Type: INTEGER
          */
         public final static String COLUMN_SECTION="section";
+        //int Constants for section spinner
+        public static final int MISC_MERCH = 0;
+        public static final int ACTION = 1;
+        public static final int MANGA = 2;
+        public static final int HORROR = 3;
+        public static final int DRAMA = 4;
+        public static final int FANTASY = 5;
+        public static final int SCI_FI = 6;
+
+
 
     }
 }

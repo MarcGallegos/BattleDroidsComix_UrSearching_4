@@ -5,13 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CatalogActivity"
-    android:background="#bbdefb">
+    android:background="@drawable/octocat">
 
     <TextView
         android:id="@+id/txt_vu_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
         android:padding="16dp"/>
 
     <android.support.design.widget.FloatingActionButton
@@ -21,5 +23,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:text="+"/>
+        android:src="@drawable/ic_library_add"/>
 </RelativeLayout>

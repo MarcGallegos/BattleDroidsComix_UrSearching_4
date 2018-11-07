@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:padding="@dimen/activity_margin"
-    tools:context=".EditorActivity">
+    tools:context=".EditorActivity"
+    android:background="#ffcccc">
 
     <!-- Category Overview -->
     <LinearLayout
@@ -16,11 +17,83 @@
        <!--Label-->
         <TextView
             android:text="@string/category_overview"
-            style="@style/CategoryStyle" />
+            style="@style/CategoryStyle"
+            android:textStyle="bold"/>
 
         <!--Input Fields-->
+        <LinearLayout
+            android:paddingLeft="4dp"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <!--EditText to get Product Name from user-->
+            <EditText
+                android:id="@+id/edit_product_name"
+                android:hint="@string/hint_product_name"
+                android:inputType="textCapWords"
+                style="@style/EditorFieldStyle"/>
 
+            <!--EditText to get Supplier Name from user-->
+            <EditText
+                android:id="@+id/edit_supplier_name"
+                android:hint="@string/hint_supplier"
+                android:inputType="textCapWords"
+                style="@style/EditorFieldStyle" />
+
+            <!--EditText to get Supplier Phone Number from user-->
+            <EditText
+                android:id="@+id/edit_supplier_ph"
+                android:hint="@string/hint_supplier_ph"
+                android:inputType="textCapWords"
+                style="@style/EditorFieldStyle" />
+
+            <!--EditText to get Product Price from user-->
+            <EditText
+                android:id="@+id/edit_price"
+                android:hint="@string/hint_price"
+                android:inputType="text"
+                style="@style/EditorFieldStyle" />
+
+            <!--EditText to get in-stock Product Quantity from user-->
+            <EditText
+                android:id="@+id/edit_quantity"
+                android:hint="@string/hint_qty"
+                android:inputType="text"
+                style="@style/EditorFieldStyle" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--Section Spinner-->
+    <LinearLayout
+        android:id="@+id/container_sect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!--Label-->
+        <TextView
+            android:text="@string/hint_section"
+            style="@style/CategoryStyle"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!--Drop-down Spinner to get Section from user-->
+            <Spinner
+                android:id="@+id/spinner_section"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:paddingRight="16dp"
+                android:spinnerMode="dropdown"
+                android:background="#ff9999"/>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

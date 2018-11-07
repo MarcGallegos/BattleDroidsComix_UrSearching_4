@@ -3,74 +3,50 @@ package com.example.android.battledroidscomix_ursearching_4;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.android.battledroidscomix_ursearching_4.data.ComiContract;
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry;
-import com.example.android.battledroidscomix_ursearching_4.data.ComixDbHelper;
 
 public class CatalogActivity extends AppCompatActivity {
 
-    //Database Helper provides access to database
-    private ComixDbHelper mComixDbHelper;
+//    //Database Helper provides access to database
+//    private ComixDbHelper mComixDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
-        // To access our database, we instantiate our SQLiteOpenHelper subclass and pass the
-        // context, which is the current activity.
-        mComixDbHelper=new ComixDbHelper(this);
-    }
+        // Setup FAB to open EditorActivity.
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent illestIntentions = new Intent
+                        (CatalogActivity.this,EditorActivity.class);
+                startActivity(illestIntentions);
+            }
+        });
+     }
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
         displayDatabaseInfo();
     }
-
-        /**
-         * Helper method to insert hardcoded item data into database, for debugging purposes only.
-         */
-        private void insertItem() {
-            //Gets database into the write mode
-            SQLiteDatabase database = mComixDbHelper.getWritableDatabase();
-
-            //Create a ContentValues object where column names are the keys, and misc schwag's item
-            //attributes are it's values.
-            ContentValues values=new ContentValues();
-            values.put(TitleEntry.COLUMN_PRODUCT_NAME,"Superman #1");
-            values.put(TitleEntry.COLUMN_SUPPLIER,"Comic World");
-            values.put(TitleEntry.COLUMN_SUPPLIER_PH,5551234);
-            values.put(TitleEntry.COLUMN_PRICE,19999);
-            values.put(TitleEntry.COLUMN_QTY,1 );
-            values.put(TitleEntry.COLUMN_SECTION,2 );
-
-            /**
-             * Insert new row for Superman #1 in the database, returning the id of that new row.
-             * The first arg for {@link db.insert()} is the items table name.
-             * The 2nd arg provides the column name in which the framework can insert NULL in the
-             * event the ContentView is empty. (If this is set NULL, the framework will not insert
-             * a new row when there are no values.
-             * The 3rd argument is the ContentValues object containing Superman #1's information.
-             */
-            database.insert(TitleEntry.TABLE_NAME,null ,values);
-        }
 
     /**
      * Temporary helper method to display information in the onscreen TextView about the DB state.
      */
     private void displayDatabaseInfo() {
-        //Create and/or open a database a database to read from it.
-        SQLiteDatabase db = mComixDbHelper.getReadableDatabase();
 
         //Define a projection that specifies which columns from the items database you will use after
         //this query.
@@ -84,14 +60,23 @@ public class CatalogActivity extends AppCompatActivity {
                 TitleEntry.COLUMN_SECTION};
 
         //Perform query on the items database table
-        Cursor cursor = db.query(
-                TitleEntry.TABLE_NAME,      //The table to query
-                projection,                 //The Columns to return
-                null,                       //The columns for the WHERE clause
-                null,                       //The values for the WHERE clause
-                null,                       //Don't group the rows
-                null,                        //Don't filter by row groups
-                null);                      //The sort order
+//        Cursor cursor = db.query(
+//                TitleEntry.TABLE_NAME,      //The table to query
+//                projection,                 //The Columns to return
+//                null,                       //The columns for the WHERE clause
+//                null,                       //The values for the WHERE clause
+//                null,                       //Don't group the rows
+//                null,                        //Don't filter by row groups
+//                null);                      //The sort order
+
+            //Perform query on provider using ContentResolver.
+            //Use the {@link PetEntry#CONTENT_URI} to access the pet data
+            Cursor cursor = getContentResolver().query(
+                TitleEntry.CONTENT_URI, //The content URI of the words table
+                projection,             //The columns to return for each row
+                null,          //Selection Criteria
+                null,       //Selection Criteria
+                null);         //Sort order for returned rows
 
         TextView displayView = (TextView) findViewById(R.id.txt_vu_item);
 
@@ -149,30 +134,53 @@ public class CatalogActivity extends AppCompatActivity {
         }
     }
 
-        @Override
-        public boolean onCreateOptionsMenu(Menu menu){
-            //Inflate menu options in the app bar overflow menu
-            getMenuInflater().inflate(R.menu.menu_catalog,menu );
-            //Add menu items to app bar
-            return true;
-            }
+        /**
+         * Helper method to insert hardcoded item data into database, for debugging purposes only.
+         */
+        private void insertItem() {
+            //Create a ContentValues object where column names are the keys, and misc schwag's item
+            //attributes are it's values.
+            ContentValues values = new ContentValues();
+            values.put(TitleEntry.COLUMN_PRODUCT_NAME, "DroidPool #1");
+            values.put(TitleEntry.COLUMN_SUPPLIER, "Comic World");
+            values.put(TitleEntry.COLUMN_SUPPLIER_PH, 5551234);
+            values.put(TitleEntry.COLUMN_PRICE, 9999);
+            values.put(TitleEntry.COLUMN_QTY, 1);
+            values.put(TitleEntry.COLUMN_SECTION, 2);
 
-         @Override
-        public boolean onOptionsItemSelected(MenuItem item){
-            //User selected menu option in app bar overflow menu
-             switch(item.getItemId()){
-                 //Respond to "Insert Dummy Data" menu item selection
-                 case R.id.action_insert_dummy_data:
-                     insertItem();
-                     displayDatabaseInfo();
-                     return true;
-                 //Respond to "Delete ALL Database Entries" menu item selection
-                 case R.id.action_delete_all_entries:
-                    //Do nothing for this stage. Will call to yet-to-be created delete method.
-                    return true;
-             }
-             return super.onOptionsItemSelected(item);
+            // Insert a new row for DroidPool #1 into the provider using Content Resolver.
+            // Use the {@link TitleEntry#CONTENT_URI} to indicate that we want to insert
+            // into the items database table.
+            //Receive the new content URI that will allow us to access DroidPool #1's data via
+            Uri newUri = getContentResolver().insert(TitleEntry.CONTENT_URI, values);
+
+            Log.v("CatalogActivity","New URI " + newUri);
         }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //Inflate menu options in the app bar overflow menu
+        getMenuInflater().inflate(R.menu.menu_catalog, menu);
+        //Add menu items to app bar
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //User selected menu option in app bar overflow menu
+        switch (item.getItemId()) {
+            //Respond to "Insert Dummy Data" menu item selection
+            case R.id.action_insert_dummy_data:
+                insertItem();
+                displayDatabaseInfo();
+                return true;
+            //Respond to "Delete ALL Database Entries" menu item selection
+            case R.id.action_delete_all_entries:
+                //Do nothing for this stage. Will call to yet-to-be created delete method.
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}
 
 
