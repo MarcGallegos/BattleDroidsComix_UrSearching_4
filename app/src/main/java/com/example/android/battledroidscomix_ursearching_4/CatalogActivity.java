@@ -3,6 +3,7 @@ package com.example.android.battledroidscomix_ursearching_4;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,11 +15,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry;
+import com.example.android.battledroidscomix_ursearching_4.data.ComixDbHelper;
 
 public class CatalogActivity extends AppCompatActivity {
 
-//    //Database Helper provides access to database
-//    private ComixDbHelper mComixDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class CatalogActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent illestIntentions = new Intent
-                        (CatalogActivity.this,EditorActivity.class);
+                        (CatalogActivity.this, EditorActivity.class);
                 startActivity(illestIntentions);
             }
         });
@@ -48,6 +48,7 @@ public class CatalogActivity extends AppCompatActivity {
      */
     private void displayDatabaseInfo() {
 
+
         //Define a projection that specifies which columns from the items database you will use after
         //this query.
         String[] projection = {
@@ -59,24 +60,14 @@ public class CatalogActivity extends AppCompatActivity {
                 TitleEntry.COLUMN_QTY,
                 TitleEntry.COLUMN_SECTION};
 
-        //Perform query on the items database table
-//        Cursor cursor = db.query(
-//                TitleEntry.TABLE_NAME,      //The table to query
-//                projection,                 //The Columns to return
-//                null,                       //The columns for the WHERE clause
-//                null,                       //The values for the WHERE clause
-//                null,                       //Don't group the rows
-//                null,                        //Don't filter by row groups
-//                null);                      //The sort order
-
             //Perform query on provider using ContentResolver.
-            //Use the {@link PetEntry#CONTENT_URI} to access the pet data
+            //Use the {@link TitleEntry#CONTENT_URI} to access the pet data
             Cursor cursor = getContentResolver().query(
                 TitleEntry.CONTENT_URI, //The content URI of the words table
                 projection,             //The columns to return for each row
                 null,          //Selection Criteria
                 null,       //Selection Criteria
-                null);         //Sort order for returned rows
+                null);    //Sort order for returned rows
 
         TextView displayView = (TextView) findViewById(R.id.txt_vu_item);
 
@@ -126,6 +117,8 @@ public class CatalogActivity extends AppCompatActivity {
                         currentPrice + " - " +
                         currentQty + " - " +
                         currentSect));
+                //Log cursor count to verify != null
+                Log.v("CatalogActivity dispDB","Cursor Count"+ cursor.getCount());
             }
         } finally {
             //Always close the cursor when done reading from it. This releases all it's resources
@@ -154,7 +147,6 @@ public class CatalogActivity extends AppCompatActivity {
             //Receive the new content URI that will allow us to access DroidPool #1's data via
             Uri newUri = getContentResolver().insert(TitleEntry.CONTENT_URI, values);
 
-            Log.v("CatalogActivity","New URI " + newUri);
         }
 
     @Override

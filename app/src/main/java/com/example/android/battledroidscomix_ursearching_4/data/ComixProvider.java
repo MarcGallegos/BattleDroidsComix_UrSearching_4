@@ -8,6 +8,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry;
+
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -62,7 +64,7 @@ public class ComixProvider extends ContentProvider {
      * Perform the query for the given URI. Use the given projection, selection, selection arguments, and sort order.
      */
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
 
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
@@ -107,7 +109,7 @@ public class ComixProvider extends ContentProvider {
      * Insert new data into the provider with the given ContentValues.
      */
     @Override
-    public Uri insert(Uri uri, ContentValues contentValues) {
+    public Uri insert(@NonNull Uri uri, ContentValues contentValues) {
         final int match = sUriMatcher.match(uri);
         switch (match){
             case ITEMS:
@@ -121,8 +123,58 @@ public class ComixProvider extends ContentProvider {
      * that specific row in the database*/
     private Uri insertItem(Uri uri, ContentValues values){
 
+        //This is for the name sanity check. It gets stored string value, passing in Prod. Name column key
+        String name = values.getAsString(TitleEntry.COLUMN_PRODUCT_NAME);
+        //This is for the supplier sanity check. Gets stored string val., passing in Supplier column key
+        String supplier = values.getAsString(TitleEntry.COLUMN_SUPPLIER);
+        //This is for the supplier contact sanity check. Gets stored int. val., passing in Supplier Phone column key
+        Integer contact = values.getAsInteger(TitleEntry.COLUMN_SUPPLIER_PH);
+        //This is for the price sanity check. Gets stored int. val., passing in Price column key
+        Integer price = values.getAsInteger(TitleEntry.COLUMN_PRICE);
+        //This is for the quantity sanity check. Gets stored int. val., passing in Quantity column key
+        Integer quantity = values.getAsInteger(TitleEntry.COLUMN_QTY);
+        //This is for the section sanity check. It gets stored int, passing in Section column key
+        Integer section = values.getAsInteger(TitleEntry.COLUMN_SECTION);
+
         //Get writable database.
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        //Name Sanity Check, If name is null, throw exception with error "Name Required"
+        //Check name is not null
+        if (name == null){
+            throw new IllegalArgumentException("Requires Item Name or Description");
+        }
+
+        //Supplier Name Sanity Check, If supplier name is null, throw exception with error "Supplier Required"
+        //Check supplier is not null
+        if (supplier == null){
+            throw new IllegalArgumentException("Requires Supplier Name");
+        }
+
+        //Supplier Contact Sanity Check, If contact is null, throw exception with error "Requires Contact"
+        //Check contact is not null
+        if (contact == null){
+            throw new IllegalArgumentException("Supplier Contact Required");
+        }
+
+        //Price Sanity Check, If price is null, fine, else  throw exception with error "Valid Price Required"
+        //Check price is not null
+        if (price != null && price < 0){
+            throw new IllegalArgumentException("Valid Price Required");
+        }
+
+        //Quantity Sanity Check, If quantity is null, fine, else  throw exception with error "Valid Quantity Required"
+        //Check price is not null
+        if (quantity != null && quantity < 0){
+            throw new IllegalArgumentException("Valid Quantity Required");
+        }
+
+        // Section Sanity Check, If section is null or not a valid section value, throw exception with
+        //error "Pet requires a valid section."  IF section is null OR section invalid- (using section
+        // and the inverse of result returned from TitleEntry.isValid(section). )
+        if (section == null || !TitleEntry.isValidSection(section)){
+            throw new IllegalArgumentException("Section is Required");
+        }
 
         //Insert new item with given values
         long id = database.insert(TitleEntry.TABLE_NAME, null,values );
@@ -141,7 +193,7 @@ public class ComixProvider extends ContentProvider {
      * Updates the data at the given selection and selection arguments, with the new ContentValues.
      */
     @Override
-    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+    public int update(@NonNull Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         return 0;
     }
 
@@ -149,7 +201,7 @@ public class ComixProvider extends ContentProvider {
      * Delete the data at the given selection and selection arguments.
      */
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         return 0;
     }
 
@@ -157,7 +209,7 @@ public class ComixProvider extends ContentProvider {
      * Returns the MIME type of data for the content URI.
      */
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         return null;
     }
 

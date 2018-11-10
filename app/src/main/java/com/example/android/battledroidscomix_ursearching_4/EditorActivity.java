@@ -2,6 +2,7 @@ package com.example.android.battledroidscomix_ursearching_4;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
@@ -135,12 +136,6 @@ public class EditorActivity extends AppCompatActivity {
         String qtyString = mInventoryQtyEditText.getText().toString().trim();
         int qty = Integer.parseInt(qtyString);
 
-        //Create database helper
-        ComixDbHelper mDbHelper = new ComixDbHelper(this);
-
-        //Gets database into writable mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
         //Create a ContentValues object where column names are the keys,
         //and product attributes from the editor are values.
         ContentValues values = new ContentValues();
@@ -151,16 +146,16 @@ public class EditorActivity extends AppCompatActivity {
         values.put(TitleEntry.COLUMN_QTY, qtyString);
         values.put(TitleEntry.COLUMN_SECTION, mSection);
 
-        //Insert new row for item in database, returning the ID for that row
-        long newRowId = db.insert(TitleEntry.TABLE_NAME, null, values);
+        //Insert new row for item in database, returning the content URI for that row
+        Uri newUri = getContentResolver().insert(TitleEntry.CONTENT_URI, values);
 
         //Show toast message depending on whether or not insertion was successful
-        if (newRowId == -1) {
+        if (newUri == null) {
             //If new row ID is -1, there was an error with the insertion
-            Toast.makeText(this, "Error Saving Product", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.editor_item_save_failure), Toast.LENGTH_SHORT).show();
         } else {
             //Otherwise, insertion was successfuland we can display new rowID in toast
-            Toast.makeText(this, "Product saved with rowID:" + newRowId, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.editor_item_save_failure) + newUri, Toast.LENGTH_SHORT).show();
         }
 
     }

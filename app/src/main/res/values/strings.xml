@@ -22,5 +22,8 @@
     <string name="section_drama">Drama</string>
     <string name="section_fantasy">Fantasy</string>
     <string name="section_sci_fi">Sci-Fi</string>
+    //Strings for editor save response toast
+    <string name="editor_item_save_affirm">Product Saved in Database! Row</string>
+    <string name="editor_item_save_failure">Problem Saving Product!</string>
 
 </resources>

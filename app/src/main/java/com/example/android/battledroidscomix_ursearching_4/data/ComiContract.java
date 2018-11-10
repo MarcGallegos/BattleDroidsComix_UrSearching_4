@@ -8,7 +8,7 @@ public final class ComiContract {
     /**
      * URI CONTENT_AUTHORITY String Constant
      */
-    public static final String CONTENT_AUTHORITY="com.example.battledroidscomix_ursearching4";
+    public static final String CONTENT_AUTHORITY="com.example.android.battledroidscomix_ursearching_4";
     /**
      * URI Scheme String Constant
      */
@@ -26,6 +26,17 @@ public final class ComiContract {
      * Each entry in the table represents a single title.
      */
     public static final class TitleEntry implements BaseColumns{
+
+        /**Returns whether section is Misc, Action, Manga, Horror, Drama, Fantasy, or Sci Fi
+         */
+        public static boolean isValidSection(int section) {
+            if (section == MISC_MERCH || section == ACTION || section == MANGA
+                || section == HORROR || section == DRAMA || section == FANTASY
+                    || section == SCI_FI){
+                return true;
+            }
+            return false;
+        }
 
         /** The content URI to access the item data in the ComixProvider*/
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI,PATH_ITEMS );
