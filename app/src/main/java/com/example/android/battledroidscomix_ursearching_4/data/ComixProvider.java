@@ -136,36 +136,33 @@ public class ComixProvider extends ContentProvider {
         //This is for the section sanity check. It gets stored int, passing in Section column key
         Integer section = values.getAsInteger(TitleEntry.COLUMN_SECTION);
 
-        //Get writable database.
-        SQLiteDatabase database = mDbHelper.getWritableDatabase();
-
         //Name Sanity Check, If name is null, throw exception with error "Name Required"
         //Check name is not null
-        if (name == null){
+        if (TextUtils.isEmpty(name)){
             throw new IllegalArgumentException("Requires Item Name or Description");
         }
 
         //Supplier Name Sanity Check, If supplier name is null, throw exception with error "Supplier Required"
         //Check supplier is not null
-        if (supplier == null){
+        if (TextUtils.isEmpty(supplier)){
             throw new IllegalArgumentException("Requires Supplier Name");
         }
 
         //Supplier Contact Sanity Check, If contact is null, throw exception with error "Requires Contact"
         //Check contact is not null
-        if (contact == null){
+        if (contact == null || contact < 0){
             throw new IllegalArgumentException("Supplier Contact Required");
         }
 
         //Price Sanity Check, If price is null, fine, else  throw exception with error "Valid Price Required"
         //Check price is not null
-        if (price != null && price < 0){
+        if (price == null || price < 0){
             throw new IllegalArgumentException("Valid Price Required");
         }
 
         //Quantity Sanity Check, If quantity is null, fine, else  throw exception with error "Valid Quantity Required"
         //Check price is not null
-        if (quantity != null && quantity < 0){
+        if (quantity == null || quantity < 0){
             throw new IllegalArgumentException("Valid Quantity Required");
         }
 
@@ -175,6 +172,9 @@ public class ComixProvider extends ContentProvider {
         if (section == null || !TitleEntry.isValidSection(section)){
             throw new IllegalArgumentException("Section is Required");
         }
+
+        //Get writable database.
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         //Insert new item with given values
         long id = database.insert(TitleEntry.TABLE_NAME, null,values );
