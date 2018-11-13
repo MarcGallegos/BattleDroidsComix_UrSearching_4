@@ -1,11 +1,13 @@
 package com.example.android.battledroidscomix_ursearching_4;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -58,7 +60,8 @@ public class EditorActivity extends AppCompatActivity {
      * {@link TitleEntry#SCI_FI},
      */
     private int mSection = TitleEntry.MISC_MERCH;
-
+    /**"Check" Variable is true if TextUtils is empty*/
+    private boolean check;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -130,10 +133,31 @@ public class EditorActivity extends AppCompatActivity {
         //Read from input fields
         //Use trim to eliminate leading and trailing whitespace
         String nameString = mProdNameEditText.getText().toString().trim();
+        if (TextUtils.isEmpty(nameString)){
+            check = true;
+
+        }
         String suppString = mSuppNameEditText.getText().toString().trim();
+        if (TextUtils.isEmpty(suppString)){
+            check = true;
+
+        }
         String supPhString = mSuppPhoneEditText.getText().toString().trim();
+        if (TextUtils.isEmpty(supPhString)){
+            check = true;
+
+        }
         String priceString = mProdPriceEditText.getText().toString().trim();
+        if (TextUtils.isEmpty(priceString)){
+            check = true;
+
+        }
         String qtyString = mInventoryQtyEditText.getText().toString().trim();
+        if (TextUtils.isEmpty(qtyString)){
+            check = true;
+
+        }
+
         int qty = Integer.parseInt(qtyString);
 
         //Create a ContentValues object where column names are the keys,
@@ -154,7 +178,7 @@ public class EditorActivity extends AppCompatActivity {
             //If new row ID is -1, there was an error with the insertion
             Toast.makeText(this, getString(R.string.editor_item_save_failure), Toast.LENGTH_SHORT).show();
         } else {
-            //Otherwise, insertion was successfuland we can display new rowID in toast
+            //Otherwise, insertion was successful and we can display new rowID in toast
             Toast.makeText(this, getString(R.string.editor_item_save_failure) + newUri, Toast.LENGTH_SHORT).show();
         }
 
@@ -176,11 +200,17 @@ public class EditorActivity extends AppCompatActivity {
             case R.id.action_save:
                 // Save Product Entry to Database(L187),
                 // and exit- finish operation(L188), and return true(L189)
-                insertItem();
-                finish();
+                if (!check) {
+                    insertItem();
+                    finish();
+                }
                 return true;
             //Respond to "Delete" menu item being selected
             case R.id.action_delete:
+                //AlertDialog to prompt user's action for data deletion
+                AlertDialog.Builder dbDeleteDialog = new AlertDialog.Builder(final Context context, final Uri){
+                    dbDeleteDialog.setMessage(R.string.delete_dialog);
+            }
                 //TODO: Write method to Delete Item
                 return true;
             //Respond to "Up" arrow button selection on app bar

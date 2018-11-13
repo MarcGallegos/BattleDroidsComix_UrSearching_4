@@ -194,7 +194,35 @@ public class ComixProvider extends ContentProvider {
      */
     @Override
     public int update(@NonNull Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
-        return 0;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case ITEMS:
+                return updateItem(uri, ContentValues contentValues, selection, selectionArgs);
+                default:
+                    throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
+    }
+
+    /**
+     * Update items in the database with the given content values. Apply the changes to the rows
+     * specified in the selection arguments- which could be 0, 1, or more items. Return # of rows
+     * updated.
+     */
+    private int updateItem(Uri uri, ContentValues contentValues, String selection,
+                           String[] selectionArgs) {
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case ITEMS:
+                return updateItem(uri,contentValues ,selection ,selectionArgs );
+            case ITEM_ID:
+                //For the ITEM_ID code, extract out the ID from the URI
+                //so we know which row to update. Selection will be "_id=?" and selection arguments
+                //will be a String Array containing the actual id.
+                selection = TitleEntry._ID + "=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                return updateItem(uri,contentValues ,selection ,selectionArgs);
+                default:
+        }
     }
 
     /**
