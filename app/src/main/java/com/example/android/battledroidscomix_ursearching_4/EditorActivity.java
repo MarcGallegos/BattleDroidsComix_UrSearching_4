@@ -61,7 +61,9 @@ public class EditorActivity extends AppCompatActivity {
      * {@link TitleEntry#SCI_FI},
      */
     private int mSection = TitleEntry.MISC_MERCH;
-    /**"Check" Variable is true if TextUtils is empty*/
+    /**
+     * "Check" Variable is true if TextUtils is empty
+     */
     private boolean check;
 
     @Override
@@ -134,27 +136,27 @@ public class EditorActivity extends AppCompatActivity {
         //Read from input fields
         //Use trim to eliminate leading and trailing whitespace
         String nameString = mProdNameEditText.getText().toString().trim();
-        if (TextUtils.isEmpty(nameString)){
+        if (TextUtils.isEmpty(nameString)) {
             check = true;
 
         }
         String suppString = mSuppNameEditText.getText().toString().trim();
-        if (TextUtils.isEmpty(suppString)){
+        if (TextUtils.isEmpty(suppString)) {
             check = true;
 
         }
         String supPhString = mSuppPhoneEditText.getText().toString().trim();
-        if (TextUtils.isEmpty(supPhString)){
+        if (TextUtils.isEmpty(supPhString)) {
             check = true;
 
         }
         String priceString = mProdPriceEditText.getText().toString().trim();
-        if (TextUtils.isEmpty(priceString)){
+        if (TextUtils.isEmpty(priceString)) {
             check = true;
 
         }
         String qtyString = mInventoryQtyEditText.getText().toString().trim();
-        if (TextUtils.isEmpty(qtyString)){
+        if (TextUtils.isEmpty(qtyString)) {
             check = true;
 
         }
@@ -209,7 +211,7 @@ public class EditorActivity extends AppCompatActivity {
                 return true;
             //Respond to "Delete" menu item being selected
             case R.id.action_delete:
-                showDeleteConfirmDialog(mCurrentBookUri);
+                showDeleteConfirmDialog();
                 return true;
 
             //Respond to "Up" arrow button selection on app bar
@@ -221,24 +223,27 @@ public class EditorActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static void showDeleteConfirmDialog(final Context context, final Uri currentBookUri) {
+    public void showDeleteConfirmDialog() {
         //AlertDialog to prompt user's action for data deletion
-        AlertDialog.Builder dbDeleteDialog = new AlertDialog.Builder(final Context context, final Uri){
-            dbDeleteDialog.setMessage(R.string.delete_dialog);
-            dbDeleteDialog.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    //User selects "cancel," dismiss dialog and continue editing item.
-                    if (dialog != null){
-                        dialog.dismiss();
-                    }
-                }
-            });
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            //Create and show the AlertDialog
-            AlertDialog alertDialog = dbDeleteDialog.create();
-            alertDialog.show();
-        }
+        builder.setMessage(R.string.delete_comic);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                //User selects "cancel," dismiss dialog and continue editing item.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        //Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+    }
 }
 
 
+//TODO:create delete db entry method

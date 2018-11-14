@@ -1,5 +1,6 @@
 package com.example.android.battledroidscomix_ursearching_4.data;
 
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -40,6 +41,9 @@ public final class ComiContract {
 
         /** The content URI to access the item data in the ComixProvider*/
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI,PATH_ITEMS );
+
+        public static final String CONTENT_LIST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ITEMS;
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ITEMS;
 
         /**Name of database table for items*/
         public final static String TABLE_NAME="items";

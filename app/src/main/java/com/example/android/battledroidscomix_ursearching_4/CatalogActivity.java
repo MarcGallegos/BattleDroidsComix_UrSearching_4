@@ -2,12 +2,17 @@ package com.example.android.battledroidscomix_ursearching_4;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.ContentUris;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.content.CursorLoader;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,9 +20,15 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry;
-import com.example.android.battledroidscomix_ursearching_4.data.ComixDbHelper;
 
-public class CatalogActivity extends AppCompatActivity {
+import static com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry.CONTENT_URI;
+
+
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int URL_LOADER = 0;
+
+    static final String[] projection = {TitleEntry._ID, TitleEntry.COLUMN_PRODUCT_NAME, TitleEntry.COLUMN_SUPPLIER, TitleEntry.COLUMN_SUPPLIER_PH, TitleEntry.COLUMN_PRICE, TitleEntry.COLUMN_QTY, TitleEntry.COLUMN_SECTION};
 
 
     @Override
@@ -35,7 +46,8 @@ public class CatalogActivity extends AppCompatActivity {
                 startActivity(illestIntentions);
             }
         });
-     }
+        getLoaderManager().initLoader(URL_LOADER,null ,this);
+    }
 
     @Override
     protected void onStart() {
@@ -60,10 +72,10 @@ public class CatalogActivity extends AppCompatActivity {
                 TitleEntry.COLUMN_QTY,
                 TitleEntry.COLUMN_SECTION};
 
-            //Perform query on provider using ContentResolver.
-            //Use the {@link TitleEntry#CONTENT_URI} to access the pet data
-            Cursor cursor = getContentResolver().query(
-                TitleEntry.CONTENT_URI, //The content URI of the words table
+        //Perform query on provider using ContentResolver.
+        //Use the {@link TitleEntry#CONTENT_URI} to access the pet data
+        Cursor cursor = getContentResolver().query(
+                CONTENT_URI, //The content URI of the words table
                 projection,             //The columns to return for each row
                 null,          //Selection Criteria
                 null,       //Selection Criteria
@@ -118,7 +130,7 @@ public class CatalogActivity extends AppCompatActivity {
                         currentQty + " - " +
                         currentSect));
                 //Log cursor count to verify != null
-                Log.v("CatalogActivity dispDB","Cursor Count"+ cursor.getCount());
+                Log.v("CatalogActivity dispDB", "Cursor Count" + cursor.getCount());
             }
         } finally {
             //Always close the cursor when done reading from it. This releases all it's resources
@@ -127,27 +139,27 @@ public class CatalogActivity extends AppCompatActivity {
         }
     }
 
-        /**
-         * Helper method to insert hardcoded item data into database, for debugging purposes only.
-         */
-        private void insertItem() {
-            //Create a ContentValues object where column names are the keys, and misc schwag's item
-            //attributes are it's values.
-            ContentValues values = new ContentValues();
-            values.put(TitleEntry.COLUMN_PRODUCT_NAME, "DroidPool #1");
-            values.put(TitleEntry.COLUMN_SUPPLIER, "Comic World");
-            values.put(TitleEntry.COLUMN_SUPPLIER_PH, 5551234);
-            values.put(TitleEntry.COLUMN_PRICE, 9999);
-            values.put(TitleEntry.COLUMN_QTY, 1);
-            values.put(TitleEntry.COLUMN_SECTION, 2);
+    /**
+     * Helper method to insert hardcoded item data into database, for debugging purposes only.
+     */
+    private void insertItem() {
+        //Create a ContentValues object where column names are the keys, and misc schwag's item
+        //attributes are it's values.
+        ContentValues values = new ContentValues();
+        values.put(TitleEntry.COLUMN_PRODUCT_NAME, "DroidPool #1");
+        values.put(TitleEntry.COLUMN_SUPPLIER, "Comic World");
+        values.put(TitleEntry.COLUMN_SUPPLIER_PH, 5551234);
+        values.put(TitleEntry.COLUMN_PRICE, 9999);
+        values.put(TitleEntry.COLUMN_QTY, 1);
+        values.put(TitleEntry.COLUMN_SECTION, 2);
 
-            // Insert a new row for DroidPool #1 into the provider using Content Resolver.
-            // Use the {@link TitleEntry#CONTENT_URI} to indicate that we want to insert
-            // into the items database table.
-            //Receive the new content URI that will allow us to access DroidPool #1's data via
-            Uri newUri = getContentResolver().insert(TitleEntry.CONTENT_URI, values);
+        // Insert a new row for DroidPool #1 into the provider using Content Resolver.
+        // Use the {@link TitleEntry#CONTENT_URI} to indicate that we want to insert
+        // into the items database table.
+        //Receive the new content URI that will allow us to access DroidPool #1's data via
+        Uri newUri = getContentResolver().insert(CONTENT_URI, values);
 
-        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -172,6 +184,29 @@ public class CatalogActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        switch (id) {
+            case URL_LOADER:
+                CursorLoader cLoader = new CursorLoader(getApplicationContext(), CONTENT_URI, projection, null, TitleEntry._ID + " DESC");
+                return cLoader;
+            default:
+                return null;
+        }
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+
     }
 }
 

@@ -37,6 +37,6 @@ public class ItemCursorAdapter extends CursorAdapter {
         //Find Sale Button
         Button saleButton = view.findViewById(R.id.sale_btn);
 
-        
+
     }
 }

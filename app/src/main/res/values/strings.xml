@@ -26,4 +26,7 @@
     <string name="editor_item_save_affirm">Product Saved in Database! Row</string>
     <string name="editor_item_save_failure">Problem Saving Product!</string>
 
+    <string name="delete_comic">Delete this comic?</string>
+    <string name="delete">Delete</string>
+
 </resources>

@@ -330,9 +330,9 @@ public class ComixProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case ITEMS:
-                return TitleEntry.CONTENT_LIST_TYPE;
+                return ComiContract.TitleEntry.CONTENT_LIST_TYPE;
             case ITEM_ID:
-                return TitleEntry.CONTENT_ITEM_TYPE;
+                return ComiContract.TitleEntry.CONTENT_ITEM_TYPE;
                 default:
                     throw new IllegalArgumentException("Unknown URI " + uri + " with match " + match);
         }
