@@ -57,7 +57,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
         ListView list = findViewById(R.id.list);
 
-        TextView emptyView = findViewById(R.id.txt_vu_item);
+        View emptyView = findViewById(R.id.empty_view);
 
         list.setEmptyView(emptyView);
 

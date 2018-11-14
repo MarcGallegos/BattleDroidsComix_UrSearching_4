@@ -33,5 +33,7 @@
     <string name="unsaved_changes">Are you sure you want to exit unsaved changes will be lost!</string>
     <string name="confirm">Discard</string>
     <string name="keep_editing">Continue Editing</string>
+    <string name="empty_view_header">It\'s a bit lonely in here...</string>
+    <string name="empty_view_subtitle">Let\'s add items and fix that!</string>
 
 </resources>
