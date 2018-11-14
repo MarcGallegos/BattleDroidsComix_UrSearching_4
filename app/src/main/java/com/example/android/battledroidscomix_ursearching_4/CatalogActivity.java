@@ -17,16 +17,24 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.android.battledroidscomix_ursearching_4.Adapters.ItemCursorAdapter;
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry;
 
 import static com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry.CONTENT_URI;
+
+//TODO: Add button in ListView to call Supplier, must open phone via intent (intent.ACTION_DIAL)
+
+//TODO: Add Sale btn (decrementing)
 
 
 public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int URL_LOADER = 0;
+
+    ItemCursorAdapter mItemCursorAdapter;
 
     static final String[] projection = {TitleEntry._ID, TitleEntry.COLUMN_PRODUCT_NAME, TitleEntry.COLUMN_SUPPLIER, TitleEntry.COLUMN_SUPPLIER_PH, TitleEntry.COLUMN_PRICE, TitleEntry.COLUMN_QTY, TitleEntry.COLUMN_SECTION};
 
@@ -46,13 +54,18 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 startActivity(illestIntentions);
             }
         });
-        getLoaderManager().initLoader(URL_LOADER,null ,this);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
+        ListView list = findViewById(R.id.list);
+
+        TextView emptyView = findViewById(R.id.txt_vu_item);
+
+        list.setEmptyView(emptyView);
+
+        mItemCursorAdapter = new ItemCursorAdapter(this, null);
+
+        list.setAdapter(mItemCursorAdapter);
+
+        getLoaderManager().initLoader(URL_LOADER,null ,this);
     }
 
     /**
@@ -189,23 +202,25 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
-        switch (id) {
+        switch(id) {
             case URL_LOADER:
-                CursorLoader cLoader = new CursorLoader(getApplicationContext(), CONTENT_URI, projection, null, TitleEntry._ID + " DESC");
-                return cLoader;
+                CursorLoader cl = new CursorLoader(this, TitleEntry.CONTENT_URI, projection, null, null, TitleEntry._ID + " DESC");
+                return cl;
             default:
                 return null;
         }
-        return null;
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        mItemCursorAdapter.swapCursor(cursor);
+
 
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        mItemCursorAdapter.swapCursor(null);
 
     }
 }

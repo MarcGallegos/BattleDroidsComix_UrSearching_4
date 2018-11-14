@@ -1,11 +1,15 @@
 package com.example.android.battledroidscomix_ursearching_4;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
-import android.content.Context;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,14 +25,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.android.battledroidscomix_ursearching_4.data.ComiContract;
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry;
-import com.example.android.battledroidscomix_ursearching_4.data.ComixDbHelper;
 
 /**
  * Allows user to create a new inventory entry or edit an existing one
  */
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    static final String[] projection = {TitleEntry._ID, TitleEntry.COLUMN_PRODUCT_NAME, TitleEntry.COLUMN_SUPPLIER, TitleEntry.COLUMN_SUPPLIER_PH, TitleEntry.COLUMN_PRICE, TitleEntry.COLUMN_QTY, TitleEntry.COLUMN_SECTION};
+
+    private static final int EXISTING_INVENTORY_LOADER = 0;
+
+    private Uri mCurrentProductUri;
 
     /**
      * EditText field for user to enter product name
@@ -64,12 +73,34 @@ public class EditorActivity extends AppCompatActivity {
     /**
      * "Check" Variable is true if TextUtils is empty
      */
-    private boolean check;
+    private boolean mTouched = false;
+
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mTouched = true;
+            return false;
+        }
+    }
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+
+        Intent intent = getIntent();
+
+        mCurrentProductUri = intent.getData();
+        if (mCurrentProductUri == null){
+            setTitle(getString(R.string.add_comic));
+            invalidateOptionsMenu();
+        } else {
+            setTitle(getString(R.string.edit_comic));
+            getLoaderManager().initLoader(EXISTING_INVENTORY_LOADER, null, this);
+        }
+
 
         //Find all relevant views needed to read user input from
         mProdNameEditText = (EditText) findViewById(R.id.edit_product_name);
@@ -78,6 +109,13 @@ public class EditorActivity extends AppCompatActivity {
         mProdPriceEditText = (EditText) findViewById(R.id.edit_price);
         mInventoryQtyEditText = (EditText) findViewById(R.id.edit_quantity);
         mSectionSpinner = (Spinner) findViewById(R.id.spinner_section);
+
+        mProdNameEditText.setOnTouchListener(mTouchListener);
+        mSuppNameEditText.setOnTouchListener(mTouchListener);
+        mSuppPhoneEditText.setOnTouchListener(mTouchListener);
+        mProdPriceEditText.setOnTouchListener(mTouchListener);
+        mInventoryQtyEditText.setOnTouchListener(mTouchListener);
+        mSectionSpinner.setOnTouchListener(mTouchListener);
 
         setupSpinner();
     }
@@ -204,7 +242,7 @@ public class EditorActivity extends AppCompatActivity {
                 //Check variable for exception l205
                 // Save Product Entry to Database l206,
                 // and exit- finish operation l207, and return true l209
-                if (!check) {
+                if (!mTouched) {
                     insertItem();
                     finish();
                 }
@@ -216,8 +254,22 @@ public class EditorActivity extends AppCompatActivity {
 
             //Respond to "Up" arrow button selection on app bar
             case R.id.home:
-                //Navigate back to Parent Activity (CatalogActivity)
-                NavUtils.navigateUpFromSameTask(this);
+
+                if (!mTouched){
+                    //Navigate back to Parent Activity (CatalogActivity)
+                    NavUtils.navigateUpFromSameTask(this);
+                    return true;
+                }
+                DialogInterface.OnClickListener discardButtonClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // User clicked "Discard" button, navigate to parent activity.
+                        NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                    }
+                };
+
+                // Show a dialog that notifies the user they have unsaved changes
+                showUnfinishedChangesDialog(discardButtonClickListener);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -242,6 +294,94 @@ public class EditorActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
+    }
+
+    public void showUnfinishedChangesDialog(DialogInterface.OnClickListener discardListener) {
+        //AlertDialog to prompt user's action for data deletion
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.unsaved_changes);
+        builder.setPositiveButton(R.string.confirm, discardListener);
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                //User selects "cancel," dismiss dialog and continue editing item.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        //Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+    }
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        CursorLoader cl = new CursorLoader(this, TitleEntry.CONTENT_URI, projection, null, null, TitleEntry._ID + " DESC");
+        return cl;
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
+        if (cursor.moveToFirst()) {
+            int nameColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_PRODUCT_NAME);
+            int supplierColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_SUPPLIER);
+            int supplierPhoneColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_SUPPLIER_PH);
+            int priceColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_PRICE);
+            int qtyColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_QTY);
+            int sectionColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_SECTION);
+
+            String currentName = cursor.getString(nameColumnIndex);
+            String currentSupplier = cursor.getString(supplierColumnIndex);
+            String currentSupplierPhone = cursor.getString(supplierPhoneColumnIndex);
+            double currentPrice = cursor.getDouble(priceColumnIndex);
+            int currentQty = cursor.getInt(qtyColumnIndex);
+            int currentSection = cursor.getInt(sectionColumnIndex);
+
+            //TODO: setText (for doubles - String.valueOf(currentPrice)
+
+            mProdPriceEditText.setText(String.valueOf(currentPrice));
+
+            switch (currentSection) {
+                case TitleEntry.MISC_MERCH:
+                    mSectionSpinner.setSelection(0);
+                    break;
+                case TitleEntry.ACTION:
+                    mSectionSpinner.setSelection(1);
+                    break;
+                case TitleEntry.MANGA:
+                    mSectionSpinner.setSelection(2);
+                    break;
+                case TitleEntry.HORROR:
+                    mSectionSpinner.setSelection(3);
+                    break;
+                case TitleEntry.DRAMA:
+                    mSectionSpinner.setSelection(4);
+                    break;
+                case TitleEntry.FANTASY:
+                    mSectionSpinner.setSelection(5);
+                    break;
+                case TitleEntry.SCI_FI:
+                    mSectionSpinner.setSelection(6);
+                    break;
+                default:
+                    mSectionSpinner.setSelection(0);
+                    break;
+            }
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+
+        //TODO: Make all textviews empty strings
     }
 }
 

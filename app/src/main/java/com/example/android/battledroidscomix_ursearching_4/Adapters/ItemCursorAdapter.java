@@ -10,13 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.TextView;
 
 import com.example.android.battledroidscomix_ursearching_4.R;
+import com.example.android.battledroidscomix_ursearching_4.data.ComiContract;
 
 public class ItemCursorAdapter extends CursorAdapter {
 
     public ItemCursorAdapter(Context context, Cursor c) {
-        super(context, c,0);
+        super(context,c,0);
     }
 
     /**
@@ -27,16 +29,17 @@ public class ItemCursorAdapter extends CursorAdapter {
      * @return the newly created list item View
      */
     @Override
-    public View nuView(Context context, Cursor cursor, @NonNull ViewGroup parent) {
+    public View newView(Context context, Cursor cursor, @NonNull ViewGroup parent) {
         //Return List item View.
         return LayoutInflater.from(context).inflate(R.layout.item_construct, parent, false);
     }
 
     @Override
-    public void bindView(View view, final Context context, final Cursor cursorData){
-        //Find Sale Button
-        Button saleButton = view.findViewById(R.id.sale_btn);
+    public void bindView(View view, final Context context, final Cursor cursor){
+        TextView product_name = view.findViewById(R.id.product_name);
 
-
+        String name = cursor.getString(cursor.getColumnIndex(ComiContract.TitleEntry.COLUMN_PRODUCT_NAME));
+        product_name.setText(name);
     }
+
 }

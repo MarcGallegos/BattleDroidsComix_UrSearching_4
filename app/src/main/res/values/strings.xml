@@ -28,5 +28,10 @@
 
     <string name="delete_comic">Delete this comic?</string>
     <string name="delete">Delete</string>
+    <string name="add_comic">Add Comic Entry</string>
+    <string name="edit_comic">Edit Comic Entry</string>
+    <string name="unsaved_changes">Are you sure you want to exit unsaved changes will be lost!</string>
+    <string name="confirm">Discard</string>
+    <string name="keep_editing">Continue Editing</string>
 
 </resources>
