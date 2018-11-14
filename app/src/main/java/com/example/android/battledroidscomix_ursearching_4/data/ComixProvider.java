@@ -190,16 +190,24 @@ public class ComixProvider extends ContentProvider {
     }
 
     /**
-     * Updates the data at the given selection and selection arguments, with the new ContentValues.
+     * Returns the MIME type of data for the content URI
      */
     @Override
-    public int update(@NonNull Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+    public int update(Uri uri, ContentValues contentValues, String selection,
+                           String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case ITEMS:
-                return updateItem(uri, ContentValues contentValues, selection, selectionArgs);
-                default:
-                    throw new IllegalArgumentException("Update is not supported for " + uri);
+                return updateItem(uri, contentValues, selection, selectionArgs);
+            case ITEM_ID:
+                //For the ITEM_ID code, extract out the ID from the URI
+                //so we know which row to update. Selection will be "_id=?" and selection arguments
+                //will be a String Array containing the actual id.
+                selection = TitleEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri)) };
+                return updateItem(uri, contentValues, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
         }
     }
 
@@ -208,21 +216,77 @@ public class ComixProvider extends ContentProvider {
      * specified in the selection arguments- which could be 0, 1, or more items. Return # of rows
      * updated.
      */
-    private int updateItem(Uri uri, ContentValues contentValues, String selection,
-                           String[] selectionArgs) {
-        final int match = sUriMatcher.match(uri);
-        switch (match) {
-            case ITEMS:
-                return updateItem(uri,contentValues ,selection ,selectionArgs );
-            case ITEM_ID:
-                //For the ITEM_ID code, extract out the ID from the URI
-                //so we know which row to update. Selection will be "_id=?" and selection arguments
-                //will be a String Array containing the actual id.
-                selection = TitleEntry._ID + "=?";
-                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
-                return updateItem(uri,contentValues ,selection ,selectionArgs);
-                default:
+    private int updateItem(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
+
+        //If the {@link TitleEntry COLUMN_NAME} key is present, verify that it's value isn't null.
+        if (values.containsKey(TitleEntry.COLUMN_PRODUCT_NAME)){
+        String name = values.getAsString(TitleEntry.COLUMN_PRODUCT_NAME);
+        if (name == null) {
+            throw new IllegalArgumentException("Item Name Required");
         }
+    }
+        //If the {@link TitleEntry COLUMN_SUPPLIER} key is present, verify that it's value isn't null.
+        if (values.containsKey(TitleEntry.COLUMN_SUPPLIER)) {
+            String supplier = values.getAsString(TitleEntry.COLUMN_SUPPLIER);
+            if (supplier == null) {
+                throw new IllegalArgumentException("Item Supplier Required");
+            }
+        }
+
+        //If the {@link TitleEntry COLUMN_SUPPLIER_PH} key is present, verify that it's value isn't null.
+        if (values.containsKey(TitleEntry.COLUMN_SUPPLIER_PH)) {
+            String supplier = values.getAsString(TitleEntry.COLUMN_SUPPLIER_PH);
+            if (supplier == null) {
+                throw new IllegalArgumentException("Supplier Contact Required");
+            }
+        }
+
+        //If the {@link TitleEntry COLUMN_PRICE} key is present, verify that it's value isn't null.
+        if (values.containsKey(TitleEntry.COLUMN_PRICE)) {
+            String supplier = values.getAsString(TitleEntry.COLUMN_PRICE);
+            if (supplier == null) {
+                throw new IllegalArgumentException("Item Price Required");
+            }
+        }
+
+        //If the {@link TitleEntry COLUMN_QTY} key is present, verify that it's value isn't null.
+        if (values.containsKey(TitleEntry.COLUMN_QTY)) {
+            String supplier = values.getAsString(TitleEntry.COLUMN_QTY);
+            if (supplier == null) {
+                throw new IllegalArgumentException("Item Quantity Required");
+            }
+        }
+
+        //If the {@link TitleEntry COLUMN_SECTION} key is present, verify that it's value isn't null.
+        if (values.containsKey(TitleEntry.COLUMN_SECTION)) {
+            String supplier = values.getAsString(TitleEntry.COLUMN_SECTION);
+            if (supplier == null) {
+                throw new IllegalArgumentException("Item Section Required");
+            }
+        }
+
+        //If no values to update, do nothing, return values size as 0.
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        //Else, get writable database to update data.
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        //preform update on the database and get number of rows updated
+        int rowsUpdated = database.update(TitleEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        //If 1 or more rows were updated, notify all listeners that data at given URI has changed.
+        if (rowsUpdated != 0) {
+            try {
+                getContext().getContentResolver().notifyChange(uri, null);
+            }catch (NullPointerException npe) {
+                Log.e(LOG_TAG, "Notify Change Failed! " + npe);
+            }
+        }
+        //Return number of rows updated
+        return rowsUpdated;
     }
 
     /**
@@ -230,7 +294,32 @@ public class ComixProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        //Get Writable Mode Database for delete operation
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        //Track Number of Rows Deleted
+        int rowsDeleted;
+
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case ITEMS:
+                //Delete all rows that match selection and selectionArgs.
+                rowsDeleted = database.delete(TitleEntry.TABLE_NAME,selection , selectionArgs);
+                break;
+                default:
+                    throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
+
+        //If one or more rows were deleted, notify all listeners that data at the given URI changed.
+        if (rowsDeleted != 0) {
+            try {
+                getContext().getContentResolver().notifyChange(uri, null);
+            } catch (NullPointerException npe) {
+                Log.e(LOG_TAG, "notify change() failed! " + npe);
+            }
+        }
+        //Return number of rows deleted
+        return rowsDeleted;
     }
 
     /**
@@ -238,7 +327,15 @@ public class ComixProvider extends ContentProvider {
      */
     @Override
     public String getType(@NonNull Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case ITEMS:
+                return TitleEntry.CONTENT_LIST_TYPE;
+            case ITEM_ID:
+                return TitleEntry.CONTENT_ITEM_TYPE;
+                default:
+                    throw new IllegalArgumentException("Unknown URI " + uri + " with match " + match);
+        }
     }
 
 }

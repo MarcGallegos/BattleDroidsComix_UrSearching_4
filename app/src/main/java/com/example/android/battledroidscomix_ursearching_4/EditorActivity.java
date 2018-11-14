@@ -2,6 +2,7 @@ package com.example.android.battledroidscomix_ursearching_4;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
@@ -198,8 +199,9 @@ public class EditorActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             //Respond to a click on the "Save" menu option
             case R.id.action_save:
-                // Save Product Entry to Database(L187),
-                // and exit- finish operation(L188), and return true(L189)
+                //Check variable for exception l205
+                // Save Product Entry to Database l206,
+                // and exit- finish operation l207, and return true l209
                 if (!check) {
                     insertItem();
                     finish();
@@ -207,12 +209,9 @@ public class EditorActivity extends AppCompatActivity {
                 return true;
             //Respond to "Delete" menu item being selected
             case R.id.action_delete:
-                //AlertDialog to prompt user's action for data deletion
-                AlertDialog.Builder dbDeleteDialog = new AlertDialog.Builder(final Context context, final Uri){
-                    dbDeleteDialog.setMessage(R.string.delete_dialog);
-            }
-                //TODO: Write method to Delete Item
+                showDeleteConfirmDialog(mCurrentBookUri);
                 return true;
+
             //Respond to "Up" arrow button selection on app bar
             case R.id.home:
                 //Navigate back to Parent Activity (CatalogActivity)
@@ -221,6 +220,25 @@ public class EditorActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public static void showDeleteConfirmDialog(final Context context, final Uri currentBookUri) {
+        //AlertDialog to prompt user's action for data deletion
+        AlertDialog.Builder dbDeleteDialog = new AlertDialog.Builder(final Context context, final Uri){
+            dbDeleteDialog.setMessage(R.string.delete_dialog);
+            dbDeleteDialog.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    //User selects "cancel," dismiss dialog and continue editing item.
+                    if (dialog != null){
+                        dialog.dismiss();
+                    }
+                }
+            });
+
+            //Create and show the AlertDialog
+            AlertDialog alertDialog = dbDeleteDialog.create();
+            alertDialog.show();
+        }
 }
 
 
