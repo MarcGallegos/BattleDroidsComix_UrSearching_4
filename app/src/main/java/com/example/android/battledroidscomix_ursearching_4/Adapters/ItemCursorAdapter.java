@@ -36,10 +36,27 @@ public class ItemCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, final Context context, final Cursor cursor){
+
         TextView product_name = view.findViewById(R.id.product_name);
+        TextView supplier_name = view.findViewById(R.id.supplier_name);
+        TextView supplier_ph = view.findViewById(R.id.supplier_ph);
+        TextView product_price = view.findViewById(R.id.product_price);
+        TextView product_quantity = view.findViewById(R.id.product_quantity);
+        TextView product_section = view.findViewById(R.id.product_section);
 
         String name = cursor.getString(cursor.getColumnIndex(ComiContract.TitleEntry.COLUMN_PRODUCT_NAME));
-        product_name.setText(name);
+        String supplier = cursor.getString(cursor.getColumnIndex(ComiContract.TitleEntry.COLUMN_SUPPLIER));
+        String reorder_ph = cursor.getString(cursor.getColumnIndex(ComiContract.TitleEntry.COLUMN_SUPPLIER_PH));
+        String price = cursor.getString(cursor.getColumnIndex(ComiContract.TitleEntry.COLUMN_PRICE));
+        String quantity = cursor.getString(cursor.getColumnIndex(ComiContract.TitleEntry.COLUMN_QTY));
+        String section = cursor.getString(cursor.getColumnIndex(ComiContract.TitleEntry.COLUMN_SECTION));
+
+        product_name.setText("Item: " + name);
+        supplier_name.setText("Supplier: " + supplier);
+        supplier_ph.setText("Contact/Reorder: " + reorder_ph);
+        product_price.setText("Price: " + price);
+        product_quantity.setText("In-Stock: " + quantity);
+        product_section.setText("Section:" + section);
     }
 
 }
