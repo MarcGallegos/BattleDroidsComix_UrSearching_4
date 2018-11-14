@@ -73,6 +73,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     /**
      * "Check" Variable is true if TextUtils is empty
      */
+    private boolean check;
     private boolean mTouched = false;
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
@@ -81,9 +82,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             mTouched = true;
             return false;
         }
-    }
-
-
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -242,7 +241,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 //Check variable for exception l205
                 // Save Product Entry to Database l206,
                 // and exit- finish operation l207, and return true l209
-                if (!mTouched) {
+                if (!mTouched && !check) {
                     insertItem();
                     finish();
                 }
