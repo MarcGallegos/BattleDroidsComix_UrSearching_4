@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry;
 
-//TODO:create delete db entry method
+//TODO: Create db delete method...
 
 /**
  * Allows user to create a new inventory entry or edit an existing one

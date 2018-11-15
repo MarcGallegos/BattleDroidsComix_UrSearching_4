@@ -239,32 +239,32 @@ public class ComixProvider extends ContentProvider {
 
         //If the {@link TitleEntry COLUMN_SUPPLIER_PH} key is present, verify that it's value isn't null.
         if (values.containsKey(TitleEntry.COLUMN_SUPPLIER_PH)) {
-            String supplier = values.getAsString(TitleEntry.COLUMN_SUPPLIER_PH);
-            if (supplier == null) {
+            String supplierPh = values.getAsString(TitleEntry.COLUMN_SUPPLIER_PH);
+            if (supplierPh == null) {
                 throw new IllegalArgumentException("Supplier Contact Required");
             }
         }
 
         //If the {@link TitleEntry COLUMN_PRICE} key is present, verify that it's value isn't null.
         if (values.containsKey(TitleEntry.COLUMN_PRICE)) {
-            String supplier = values.getAsString(TitleEntry.COLUMN_PRICE);
-            if (supplier == null) {
+            String price = values.getAsString(TitleEntry.COLUMN_PRICE);
+            if (price == null) {
                 throw new IllegalArgumentException("Item Price Required");
             }
         }
 
         //If the {@link TitleEntry COLUMN_QTY} key is present, verify that it's value isn't null.
         if (values.containsKey(TitleEntry.COLUMN_QTY)) {
-            String supplier = values.getAsString(TitleEntry.COLUMN_QTY);
-            if (supplier == null) {
+            String quantity = values.getAsString(TitleEntry.COLUMN_QTY);
+            if (quantity == null) {
                 throw new IllegalArgumentException("Item Quantity Required");
             }
         }
 
         //If the {@link TitleEntry COLUMN_SECTION} key is present, verify that it's value isn't null.
         if (values.containsKey(TitleEntry.COLUMN_SECTION)) {
-            String supplier = values.getAsString(TitleEntry.COLUMN_SECTION);
-            if (supplier == null) {
+            String section = values.getAsString(TitleEntry.COLUMN_SECTION);
+            if (section == null) {
                 throw new IllegalArgumentException("Item Section Required");
             }
         }

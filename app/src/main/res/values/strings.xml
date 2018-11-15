@@ -42,5 +42,6 @@
     <string name="populate_price">Please Complete Price Field!</string>
     <string name="populate_qty">Please Complete Inv. Quantity Field!</string>
     <string name="populate_section">Please Complete Section Field!</string>
+    <string name="sale_btn">Sale</string>
 
 </resources>

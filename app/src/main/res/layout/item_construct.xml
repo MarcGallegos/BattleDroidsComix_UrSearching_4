@@ -57,13 +57,13 @@
             android:id="@+id/supplier_ph"
             android:paddingHorizontal="4dp"/>
         <Button
-            android:id="@+id/supplier_contact"
+            android:id="@+id/sale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/oval_red_pill_btn"
             android:textColor="#FFFFFF"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:text="@string/reorder"/>
+            android:text="@string/sale_btn"/>
     </LinearLayout>
 
 </LinearLayout>
