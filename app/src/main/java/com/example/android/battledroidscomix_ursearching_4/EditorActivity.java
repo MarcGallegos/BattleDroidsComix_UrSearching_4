@@ -27,6 +27,8 @@ import android.widget.Toast;
 
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry;
 
+//TODO:create delete db entry method
+
 /**
  * Allows user to create a new inventory entry or edit an existing one
  */
@@ -73,13 +75,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     /**
      * "Check" Variable is true if TextUtils is empty
      */
-    private boolean check;
+    private boolean check = false;
     private boolean mTouched = false;
 
+    //OnTouch Listener to listen to EditTextViews
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             mTouched = true;
+            view.performClick();
             return false;
         }
     };
@@ -89,17 +93,25 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
+        //Examine the intent used to Launch this activity to determine if a new item needs created
+        // or an existing one needs edited
         Intent intent = getIntent();
-
         mCurrentProductUri = intent.getData();
+
+        //If intent does not have a content URI, create new entry
         if (mCurrentProductUri == null){
+            //new entry- change title to "Add Comic".
             setTitle(getString(R.string.add_comic));
+
+            //Invalidate options menu, so "Delete" menu option can be hidden. As no need to delete.
             invalidateOptionsMenu();
         } else {
+            //Existing Book, change app bar to "Edit Comic"
             setTitle(getString(R.string.edit_comic));
+
+            //Initialize a loader to read row data from the database, and display current values in editor
             getLoaderManager().initLoader(EXISTING_INVENTORY_LOADER, null, this);
         }
-
 
         //Find all relevant views needed to read user input from
         mProdNameEditText = (EditText) findViewById(R.id.edit_product_name);
@@ -109,6 +121,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mInventoryQtyEditText = (EditText) findViewById(R.id.edit_quantity);
         mSectionSpinner = (Spinner) findViewById(R.id.spinner_section);
 
+        // Setup onTouch Listeners on all input fields
         mProdNameEditText.setOnTouchListener(mTouchListener);
         mSuppNameEditText.setOnTouchListener(mTouchListener);
         mSuppPhoneEditText.setOnTouchListener(mTouchListener);
@@ -174,30 +187,36 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         //Use trim to eliminate leading and trailing whitespace
         String nameString = mProdNameEditText.getText().toString().trim();
         if (TextUtils.isEmpty(nameString)) {
+            Toast.makeText(this, R.string.populate_name , Toast.LENGTH_LONG).show();
             check = true;
 
         }
         String suppString = mSuppNameEditText.getText().toString().trim();
         if (TextUtils.isEmpty(suppString)) {
+            Toast.makeText(this, R.string.populate_supplier , Toast.LENGTH_LONG).show();
             check = true;
 
         }
         String supPhString = mSuppPhoneEditText.getText().toString().trim();
         if (TextUtils.isEmpty(supPhString)) {
+            Toast.makeText(this, R.string.populate_contact , Toast.LENGTH_LONG).show();
             check = true;
 
         }
         String priceString = mProdPriceEditText.getText().toString().trim();
         if (TextUtils.isEmpty(priceString)) {
+            Toast.makeText(this, R.string.populate_price , Toast.LENGTH_LONG).show();
             check = true;
 
         }
         String qtyString = mInventoryQtyEditText.getText().toString().trim();
         if (TextUtils.isEmpty(qtyString)) {
+            Toast.makeText(this, R.string.populate_section , Toast.LENGTH_LONG).show();
             check = true;
 
         }
 
+        // Quantity variable for future use with Sale and +/- buttons
         int qty = Integer.parseInt(qtyString);
 
         //Create a ContentValues object where column names are the keys,
@@ -234,17 +253,20 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         //User selects menu option in app bar overflow menu
         switch (item.getItemId()) {
+
             //Respond to a click on the "Save" menu option
             case R.id.action_save:
-                //Check variable for exception l205
-                // Save Product Entry to Database l206,
-                // and exit- finish operation l207, and return true l209
+
+                //Check variable for exception l249
+                // Save Product Entry to Database l250,
+                // and exit- finish operation l207.
                 if (!check) {
                     insertItem();
                     finish();
-                    return true;
+//                    return true;
                 }
 
             //Respond to "Delete" menu item being selected
@@ -326,10 +348,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+
+        // Bail early if the cursor is null or there is less than 1 row in the cursor
         if (cursor == null || cursor.getCount() < 1) {
             return;
         }
+
+        // Proceed with moving to the first row of the cursor and reading data from it
+        // (This should be the only row in the cursor)
         if (cursor.moveToFirst()) {
+            //Find Columns with attributes desired.
             int nameColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_PRODUCT_NAME);
             int supplierColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_SUPPLIER);
             int supplierPhoneColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_SUPPLIER_PH);
@@ -337,6 +365,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             int qtyColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_QTY);
             int sectionColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_SECTION);
 
+            // Extract out the value from the Cursor for the given column index
             String currentName = cursor.getString(nameColumnIndex);
             String currentSupplier = cursor.getString(supplierColumnIndex);
             String currentSupplierPhone = cursor.getString(supplierPhoneColumnIndex);
@@ -344,9 +373,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             int currentQty = cursor.getInt(qtyColumnIndex);
             int currentSection = cursor.getInt(sectionColumnIndex);
 
-            //TODO: setText (for doubles - String.valueOf(currentPrice)
-
+            // Update the views on the screen with the values from the database
+            mProdNameEditText.setText(String.valueOf(currentName));
+            mSuppNameEditText.setText(String.valueOf(currentSupplier));
+            mSuppPhoneEditText.setText(String.valueOf(currentSupplierPhone));
             mProdPriceEditText.setText(String.valueOf(currentPrice));
+            mInventoryQtyEditText.setText(String.valueOf(currentQty));
+
 
             switch (currentSection) {
                 case TitleEntry.MISC_MERCH:
@@ -384,6 +417,3 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         //TODO: Make all textviews empty strings
     }
 }
-
-
-//TODO:create delete db entry method

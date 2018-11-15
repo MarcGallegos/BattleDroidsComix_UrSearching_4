@@ -99,29 +99,40 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 //    /**
 //     * Temporary helper method to display information in the onscreen TextView about the DB state.
 //     */
-//    private void displayDatabaseInfo() {
-//
-//
-//        //Define a projection that specifies which columns from the items database you will use after
-//        //this query.
-//        String[] projection = {
-//                TitleEntry._ID,
-//                TitleEntry.COLUMN_PRODUCT_NAME,
-//                TitleEntry.COLUMN_SUPPLIER,
-//                TitleEntry.COLUMN_SUPPLIER_PH,
-//                TitleEntry.COLUMN_PRICE,
-//                TitleEntry.COLUMN_QTY,
-//                TitleEntry.COLUMN_SECTION};
-//
-//        //Perform query on provider using ContentResolver.
-//        //Use the {@link TitleEntry#CONTENT_URI} to access the pet data
-//        Cursor cursor = getContentResolver().query(
-//                CONTENT_URI, //The content URI of the words table
-//                projection,             //The columns to return for each row
-//                null,          //Selection Criteria
-//                null,       //Selection Criteria
-//                null);    //Sort order for returned rows
-//
+    private void displayDatabaseInfo() {
+
+
+        //Define a projection that specifies which columns from the items database you will use after
+        //this query.
+        String[] projection = {
+                TitleEntry._ID,
+                TitleEntry.COLUMN_PRODUCT_NAME,
+                TitleEntry.COLUMN_SUPPLIER,
+                TitleEntry.COLUMN_SUPPLIER_PH,
+                TitleEntry.COLUMN_PRICE,
+                TitleEntry.COLUMN_QTY,
+                TitleEntry.COLUMN_SECTION};
+
+        //Perform query on provider using ContentResolver.
+        //Use the {@link TitleEntry#CONTENT_URI} to access the pet data
+        Cursor cursor = getContentResolver().query(
+                CONTENT_URI, //The content URI of the words table
+                projection,             //The columns to return for each row
+                null,          //Selection Criteria
+                null,       //Selection Criteria
+                null);    //Sort order for returned rows
+
+        //Find ListView to be populated with data
+        ListView list = findViewById(R.id.list);
+
+        //Setup an adapter to Create list item for each row of Cursor Data
+        ItemCursorAdapter adapter = new ItemCursorAdapter(this, cursor);
+
+        //Attach adapter to the ListView
+        list.setAdapter(adapter);
+    }
+
+
 //        TextView displayView = (TextView) findViewById(R.id.txt_vu_item);
 //
 //        try {
@@ -217,7 +228,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             //Respond to "Insert Dummy Data" menu item selection
             case R.id.action_insert_dummy_data:
                 insertItem();
-//                displayDatabaseInfo();
+                displayDatabaseInfo();
                 return true;
             //Respond to "Delete ALL Database Entries" menu item selection
             case R.id.action_delete_all_entries:

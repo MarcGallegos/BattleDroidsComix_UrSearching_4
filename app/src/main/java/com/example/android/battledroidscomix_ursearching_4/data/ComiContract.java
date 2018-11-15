@@ -6,21 +6,30 @@ import android.provider.BaseColumns;
 
 public final class ComiContract {
 
-    /**
-     * URI CONTENT_AUTHORITY String Constant
-     */
-    public static final String CONTENT_AUTHORITY="com.example.android.battledroidscomix_ursearching_4";
-    /**
-     * URI Scheme String Constant
-     */
-    public static final Uri BASE_CONTENT_URI=Uri.parse("content://" + CONTENT_AUTHORITY);
-    /**
-     * URI PATH_Tablename Constant
-     */
-    public static final String PATH_ITEMS = "items";
-
     // private empty constructor to prevent accidental instantiation of Contract Class.
     private ComiContract(){}
+
+    /**
+     * The "Content authority" is a name for the entire content provider, similar to the
+     * relationship between a domain name and its website.  A convenient string to use for the
+     * content authority is the package name for the app, which is guaranteed to be unique on the
+     * device.
+     */
+    public static final String CONTENT_AUTHORITY="com.example.android.battledroidscomix_ursearching_4";
+
+    /**
+     * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
+     * the content provider.
+     */
+    public static final Uri BASE_CONTENT_URI=Uri.parse("content://" + CONTENT_AUTHORITY);
+
+    /**
+     * Possible path (appended to base content URI for possible URI's)
+     * For instance, content://com.example.android.BattledroidsComix_Ursearching_4/items/ is a valid path for
+     * looking at item data. content://com.example.android.BattledroidsComix_Ursearching_4/items/.../ will fail,
+     * as the ContentProvider hasn't been given any information on what to do with "...".
+     */
+    public static final String PATH_ITEMS = "items";
 
     /**
      * Inner class that defines constant values for the inventory database table.
@@ -82,6 +91,7 @@ public final class ComiContract {
          * Type: INTEGER
          */
         public final static String COLUMN_SECTION="section";
+
         //int Constants for section spinner
         public static final int MISC_MERCH = 0;
         public static final int ACTION = 1;

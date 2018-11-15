@@ -37,6 +37,16 @@ public class ItemCursorAdapter extends CursorAdapter {
         return LayoutInflater.from(context).inflate(R.layout.item_construct, parent, false);
     }
 
+    /**
+     * This method binds the item data (in the current row pointed to by cursor) to the given
+     * list item layout. For example, the name for the current item can be set on the name TextView
+     * in the list item layout.
+     *
+     * @param view    Existing view, returned earlier by newView() method
+     * @param context app context
+     * @param cursor  The cursor from which to get the data. The cursor is already moved to the
+     *                correct row.
+     */
     @Override
     public void bindView(View view, final Context context, final Cursor cursor){
 
@@ -60,8 +70,5 @@ public class ItemCursorAdapter extends CursorAdapter {
         product_price.setText("Price: " + price);
         product_quantity.setText("In-Stock: " + quantity);
         product_section.setText("Section:" + section);
-
-
     }
-
 }

@@ -36,5 +36,11 @@
     <string name="empty_view_header">It\'s a bit lonely in here...</string>
     <string name="empty_view_subtitle">Let\'s add items and fix that!</string>
     <string name="reorder">Reorder</string>
+    <string name="populate_name">Please Complete Name Field!</string>
+    <string name="populate_supplier">Please Complete Supplier Name Field!</string>
+    <string name="populate_contact">Please Supplier Phone Field!</string>
+    <string name="populate_price">Please Complete Price Field!</string>
+    <string name="populate_qty">Please Complete Inv. Quantity Field!</string>
+    <string name="populate_section">Please Complete Section Field!</string>
 
 </resources>
