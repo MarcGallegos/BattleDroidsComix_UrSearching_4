@@ -17,11 +17,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.android.battledroidscomix_ursearching_4.Adapters.ItemCursorAdapter;
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry;
+
+import java.util.Set;
 
 import static com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry.CONTENT_URI;
 
@@ -62,10 +65,34 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         View emptyView = findViewById(R.id.empty_view);
         list.setEmptyView(emptyView);
 
+        // Setup an Adapter to create a list item for each row of item data in the Cursor.
+        // There is no item data yet (until the loader finishes) so pass in null for the Cursor.
         mItemCursorAdapter = new ItemCursorAdapter(this, null);
-
+        //Set adapter to List
         list.setAdapter(mItemCursorAdapter);
 
+        //Setup an item click listener to listen for touch on the List elements
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                //create new intent to goto EditorActivity
+                Intent detailTransition = new Intent(CatalogActivity.this, EditorActivity.class);
+
+                //Form the CONTENT_URI that represents the specific List item selected,
+                //by appending "id"(passed in as input) onto {@link TitleEntry.CONTENT_URI).
+                // e.g. the URI would be "content://com.example.android.battledroids_comix_ursearching_4/items/item2"
+                //if item 2 was selected from the list.
+                Uri currentItemUri = ContentUris.withAppendedId(TitleEntry.CONTENT_URI, id);
+
+                // Set the URI on the data field of the intent.
+                detailTransition.setData(currentItemUri);
+
+                //Launch the EditorActivity to display data for the current pet.
+                startActivity(detailTransition);
+            }
+        });
+
+        //Kick off the loader
         getLoaderManager().initLoader(URL_LOADER,null ,this);
     }
 

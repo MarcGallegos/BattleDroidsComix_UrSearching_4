@@ -16,13 +16,15 @@ import com.example.android.battledroidscomix_ursearching_4.R;
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract;
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry;
 
+// CursorAdapter is an adapter for Grid/ListView that uses a Cursor of Item Data as it's data source
+// This adapter knows how to create list items for each row of data in the Cursor.
 public class ItemCursorAdapter extends CursorAdapter {
 
     public ItemCursorAdapter(Context context, Cursor c) {
         super(context,c,0);
     }
 
-    /**
+    /** Constructs a new ItemCursorAdapter
      *
      * @param context app context
      * @param cursor  The cursor desired to retrieve data from, already in position

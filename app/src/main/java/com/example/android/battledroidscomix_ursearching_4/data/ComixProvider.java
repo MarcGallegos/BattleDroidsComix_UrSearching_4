@@ -184,6 +184,8 @@ public class ComixProvider extends ContentProvider {
             return null;
         }
 
+        getContext().getContentResolver().notifyChange(uri,null );
+
         //Once we know the id of the new table row,
         //return the new URI with the ID appended to the end of it
         return ContentUris.withAppendedId(uri, id );
@@ -219,13 +221,14 @@ public class ComixProvider extends ContentProvider {
     private int updateItem(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
 
-        //If the {@link TitleEntry COLUMN_NAME} key is present, verify that it's value isn't null.
-        if (values.containsKey(TitleEntry.COLUMN_PRODUCT_NAME)){
+    //If the {@link TitleEntry COLUMN_NAME} key is present, verify that it's value isn't null.
+    if (values.containsKey(TitleEntry.COLUMN_PRODUCT_NAME)){
         String name = values.getAsString(TitleEntry.COLUMN_PRODUCT_NAME);
         if (name == null) {
             throw new IllegalArgumentException("Item Name Required");
         }
     }
+
         //If the {@link TitleEntry COLUMN_SUPPLIER} key is present, verify that it's value isn't null.
         if (values.containsKey(TitleEntry.COLUMN_SUPPLIER)) {
             String supplier = values.getAsString(TitleEntry.COLUMN_SUPPLIER);

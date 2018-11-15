@@ -219,7 +219,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             Toast.makeText(this, getString(R.string.editor_item_save_failure), Toast.LENGTH_SHORT).show();
         } else {
             //Otherwise, insertion was successful and we can display new rowID in toast
-            Toast.makeText(this, getString(R.string.editor_item_save_failure) + newUri, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.editor_item_save_affirm) + newUri, Toast.LENGTH_SHORT).show();
         }
 
     }
