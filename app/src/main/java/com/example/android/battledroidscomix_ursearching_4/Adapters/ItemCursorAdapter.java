@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.android.battledroidscomix_ursearching_4.R;
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract;
+import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry;
 
 public class ItemCursorAdapter extends CursorAdapter {
 
@@ -57,6 +58,8 @@ public class ItemCursorAdapter extends CursorAdapter {
         product_price.setText("Price: " + price);
         product_quantity.setText("In-Stock: " + quantity);
         product_section.setText("Section:" + section);
+
+
     }
 
 }
