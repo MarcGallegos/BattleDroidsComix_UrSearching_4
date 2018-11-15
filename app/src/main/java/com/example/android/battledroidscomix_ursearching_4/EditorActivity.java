@@ -241,11 +241,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 //Check variable for exception l205
                 // Save Product Entry to Database l206,
                 // and exit- finish operation l207, and return true l209
-                if (!mTouched && !check) {
+                if (!check) {
                     insertItem();
                     finish();
+                    return true;
                 }
-                return true;
+
             //Respond to "Delete" menu item being selected
             case R.id.action_delete:
                 showDeleteConfirmDialog();

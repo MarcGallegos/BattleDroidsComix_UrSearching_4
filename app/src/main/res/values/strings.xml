@@ -35,5 +35,6 @@
     <string name="keep_editing">Continue Editing</string>
     <string name="empty_view_header">It\'s a bit lonely in here...</string>
     <string name="empty_view_subtitle">Let\'s add items and fix that!</string>
+    <string name="reorder">Reorder</string>
 
 </resources>

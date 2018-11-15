@@ -46,21 +46,21 @@
             <EditText
                 android:id="@+id/edit_supplier_ph"
                 android:hint="@string/hint_supplier_ph"
-                android:inputType="textCapWords"
+                android:inputType="number"
                 style="@style/EditorFieldStyle" />
 
             <!--EditText to get Product Price from user-->
             <EditText
                 android:id="@+id/edit_price"
                 android:hint="@string/hint_price"
-                android:inputType="text"
+                android:inputType="number"
                 style="@style/EditorFieldStyle" />
 
             <!--EditText to get in-stock Product Quantity from user-->
             <EditText
                 android:id="@+id/edit_quantity"
                 android:hint="@string/hint_qty"
-                android:inputType="text"
+                android:inputType="number"
                 style="@style/EditorFieldStyle" />
 
         </LinearLayout>

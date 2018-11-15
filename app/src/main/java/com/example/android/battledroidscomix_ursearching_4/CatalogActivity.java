@@ -55,10 +55,11 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             }
         });
 
+        //Find ListView to be populated with db data
         ListView list = findViewById(R.id.list);
 
+        //Find/Set empty view on ListView
         View emptyView = findViewById(R.id.empty_view);
-
         list.setEmptyView(emptyView);
 
         mItemCursorAdapter = new ItemCursorAdapter(this, null);

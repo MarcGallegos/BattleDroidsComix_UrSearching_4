@@ -53,7 +53,7 @@ public class ItemCursorAdapter extends CursorAdapter {
 
         product_name.setText("Item: " + name);
         supplier_name.setText("Supplier: " + supplier);
-        supplier_ph.setText("Contact/Reorder: " + reorder_ph);
+        supplier_ph.setText("Contact: " + reorder_ph);
         product_price.setText("Price: " + price);
         product_quantity.setText("In-Stock: " + quantity);
         product_section.setText("Section:" + section);
