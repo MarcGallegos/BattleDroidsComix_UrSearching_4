@@ -5,8 +5,7 @@
     android:layout_margin="@dimen/activity_margin">
 
     <LinearLayout
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="4dp"
@@ -14,21 +13,32 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/activity_margin"
+            android:layout_marginLeft="@dimen/activity_margin"
+            android:maxLines="1"
+            android:textSize="16sp"
+            android:textColor="#000000"
             android:textStyle="bold"
-            android:id="@+id/product_name"
-            android:paddingHorizontal="4dp"/>
+            android:shadowColor="@color/brass"
+            android:shadowDx="7"
+            android:shadowDy="8"
+            android:shadowRadius="8"
+            android:id="@+id/product_name" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="22dp"
+            android:maxLines="1"
+            android:textColor="#000000"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:id="@+id/supplier_name"
-            android:paddingHorizontal="4dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:id="@+id/product_price"
-            android:paddingHorizontal="4dp"/>
+            android:shadowColor="@color/brass"
+            android:shadowDx="7"
+            android:shadowDy="8"
+            android:shadowRadius="8"
+            android:id="@+id/supplier_name"/>
     </LinearLayout>
 
     <LinearLayout
@@ -38,32 +48,87 @@
         android:orientation="horizontal"
         android:layout_margin="4dp"
         android:padding="2dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_gravity="center_vertical"
+            android:textSize="16sp"
+            android:textColor="#000000"
             android:textStyle="bold"
-            android:id="@+id/product_quantity"
-            android:paddingHorizontal="4dp"/>
+            android:shadowColor="@color/brass"
+            android:shadowDx="7"
+            android:shadowDy="8"
+            android:shadowRadius="8"
+            android:id="@+id/product_quantity"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_gravity="center_vertical"
+            android:textColor="#000000"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:id="@+id/product_section"
-            android:paddingHorizontal="4dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:id="@+id/supplier_ph"
-            android:paddingHorizontal="4dp"/>
+            android:shadowColor="@color/brass"
+            android:shadowDx="7"
+            android:shadowDy="8"
+            android:shadowRadius="8"
+            android:id="@+id/supplier_ph"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="4dp"
+        android:padding="2dp">
+
         <Button
             android:id="@+id/sale"
+            android:focusable="false"
+            android:layout_marginHorizontal="26dp"
+            android:clickable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/oval_red_pill_btn"
             android:textColor="#FFFFFF"
+            android:shadowColor="@color/brass"
+            android:shadowDx="7"
+            android:shadowDy="8"
+            android:shadowRadius="8"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:text="@string/sale_btn"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_gravity="center_vertical"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:shadowColor="@color/brass"
+            android:shadowDx="7"
+            android:shadowDy="8"
+            android:shadowRadius="8"
+            android:id="@+id/product_price"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_gravity="center_vertical"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:shadowColor="@color/brass"
+            android:shadowDx="7"
+            android:shadowDy="8"
+            android:shadowRadius="8"
+            android:id="@+id/product_section"/>
+
     </LinearLayout>
 
 </LinearLayout>

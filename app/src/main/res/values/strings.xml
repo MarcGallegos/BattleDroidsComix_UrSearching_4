@@ -43,5 +43,13 @@
     <string name="populate_qty">Please Complete Inv. Quantity Field!</string>
     <string name="populate_section">Please Complete Section Field!</string>
     <string name="sale_btn">Sale</string>
+    <string name="editor_update_save_failure">Update Failed!</string>
+    <string name="editor_update_save_affirm">Successfully Updated Item!</string>
+    <string name="populate_fields">All Fields Must Be Completed!</string>
+    <string name="editor_item_update_success">Update Successful!</string>
+    <string name="editor_item_update_failed">Update Failed!</string>
+    <string name="cancel">NO! CANCEL!!!</string>
+    <string name="delete_failed">Deletion Failed!!</string>
+    <string name="delete_affirm">Deletion Successful!!</string>
 
 </resources>

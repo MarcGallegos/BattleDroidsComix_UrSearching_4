@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- Editor Layout -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:padding="@dimen/activity_margin"
@@ -22,6 +22,7 @@
 
         <!--Input Fields-->
         <LinearLayout
+            android:id="@+id/input_fields"
             android:paddingLeft="4dp"
             android:layout_weight="2"
             android:layout_width="0dp"
@@ -53,47 +54,75 @@
             <EditText
                 android:id="@+id/edit_price"
                 android:hint="@string/hint_price"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 style="@style/EditorFieldStyle" />
 
-            <!--EditText to get in-stock Product Quantity from user-->
-            <EditText
-                android:id="@+id/edit_quantity"
-                android:hint="@string/hint_qty"
-                android:inputType="number"
-                style="@style/EditorFieldStyle" />
 
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <!--Section Spinner-->
-    <LinearLayout
-        android:id="@+id/container_sect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <!--Label-->
-        <TextView
-            android:text="@string/hint_section"
-            style="@style/CategoryStyle"
-            android:textStyle="bold"/>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <!--Drop-down Spinner to get Section from user-->
-            <Spinner
-                android:id="@+id/spinner_section"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:paddingRight="16dp"
-                android:spinnerMode="dropdown"
-                android:background="#ff9999"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/decrement_qty"
+                    android:layout_width="36dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/fluopillslred" />
+
+                <Button
+                    android:id="@+id/increment_qty"
+                    android:layout_width="36dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/fluopillsrred" />
+
+                <!--EditText to get in-stock Product Quantity from user-->
+                <EditText
+                    android:id="@+id/edit_quantity"
+                    android:hint="@string/hint_qty"
+                    android:inputType="number"
+                    style="@style/EditorFieldStyle" />
+            </LinearLayout>
+
+            <!--Section Spinner-->
+            <LinearLayout
+                android:id="@+id/container_sect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!--Label-->
+                <TextView
+                    android:text="@string/hint_section"
+                    style="@style/CategoryStyle"
+                    android:textStyle="bold"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <!--Drop-down Spinner to get Section from user-->
+                    <Spinner
+                        android:id="@+id/spinner_section"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:paddingRight="16dp"
+                        android:spinnerMode="dropdown"
+                        android:background="#ff9999"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/call_supplier"
+                android:layout_marginTop="96dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/oval_red_pill_btn"
+                android:textColor="#FFFFFF"
+                android:text="@string/reorder"/>
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+
+
+</RelativeLayout>

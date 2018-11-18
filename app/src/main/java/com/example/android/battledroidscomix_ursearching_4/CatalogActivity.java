@@ -13,24 +13,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.content.CursorLoader;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.android.battledroidscomix_ursearching_4.Adapters.ItemCursorAdapter;
 import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry;
 
-import java.util.Set;
-
 import static com.example.android.battledroidscomix_ursearching_4.data.ComiContract.TitleEntry.CONTENT_URI;
-
-//TODO: Add button in ListView to call Supplier, must open phone via intent (intent.ACTION_DIAL)
-
-//TODO: Add Sale btn (decrementing)
 
 
 public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -72,6 +64,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         list.setAdapter(mItemCursorAdapter);
 
         //Setup an item click listener to listen for touch on the List elements
+        //Note android:focusable="false" is applied to the button in item_construct.xml
+        // if you do not add that line you will not be able to click the list item at all
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -95,101 +89,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         //Kick off the loader
         getLoaderManager().initLoader(URL_LOADER,null ,this);
     }
-
-//    /**
-//     * Temporary helper method to display information in the onscreen TextView about the DB state.
-//     */
-    private void displayDatabaseInfo() {
-
-
-        //Define a projection that specifies which columns from the items database you will use after
-        //this query.
-        String[] projection = {
-                TitleEntry._ID,
-                TitleEntry.COLUMN_PRODUCT_NAME,
-                TitleEntry.COLUMN_SUPPLIER,
-                TitleEntry.COLUMN_SUPPLIER_PH,
-                TitleEntry.COLUMN_PRICE,
-                TitleEntry.COLUMN_QTY,
-                TitleEntry.COLUMN_SECTION};
-
-        //Perform query on provider using ContentResolver.
-        //Use the {@link TitleEntry#CONTENT_URI} to access the pet data
-        Cursor cursor = getContentResolver().query(
-                CONTENT_URI, //The content URI of the words table
-                projection,             //The columns to return for each row
-                null,          //Selection Criteria
-                null,       //Selection Criteria
-                null);    //Sort order for returned rows
-
-        //Find ListView to be populated with data
-        ListView list = findViewById(R.id.list);
-
-        //Setup an adapter to Create list item for each row of Cursor Data
-        ItemCursorAdapter adapter = new ItemCursorAdapter(this, cursor);
-
-        //Attach adapter to the ListView
-        list.setAdapter(adapter);
-    }
-
-
-//        TextView displayView = (TextView) findViewById(R.id.txt_vu_item);
-//
-//        try {
-//            //Create header in TextView that looks like this:
-//            //
-//            //The items table contains <number of rows in Cursor> pets.
-//            //_id - product name - supplier name - supplier ph num - price - qty - section
-//            //
-//            //In the WHILE loop below, iterate through the rows of the cursor and display the
-//            //information from each column in following order.
-//            displayView.setText("The items table contains " + cursor.getCount() + " items. \n\n");
-//            displayView.append(TitleEntry._ID + " - " +
-//                    TitleEntry.COLUMN_PRODUCT_NAME + " - " +
-//                    TitleEntry.COLUMN_SUPPLIER + " - " +
-//                    TitleEntry.COLUMN_SUPPLIER_PH + " - " +
-//                    TitleEntry.COLUMN_PRICE + " - " +
-//                    TitleEntry.COLUMN_QTY + " - " +
-//                    TitleEntry.COLUMN_SECTION + "\n");
-//
-//            //Find/Bind index of each column.
-//            int idColumnIndex = cursor.getColumnIndex(TitleEntry._ID);
-//            int nameColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_PRODUCT_NAME);
-//            int supplColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_SUPPLIER);
-//            int suppPhColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_SUPPLIER_PH);
-//            int priceColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_PRICE);
-//            int quantColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_QTY);
-//            int sectColumnIndex = cursor.getColumnIndex(TitleEntry.COLUMN_SECTION);
-//
-//            //Iterate thru all returned rows in cursor.
-//            while (cursor.moveToNext()) {
-//                //Use that index to extract string or Int value of the word @ current row
-//                //cursor is on.
-//                int currentId = cursor.getInt(idColumnIndex);
-//                String currentName = cursor.getString(nameColumnIndex);
-//                String currentSupplier = cursor.getString(supplColumnIndex);
-//                String currentSuppPh = cursor.getString(suppPhColumnIndex);
-//                String currentPrice = cursor.getString(priceColumnIndex);
-//                int currentQty = cursor.getInt(quantColumnIndex);
-//                int currentSect = cursor.getInt(sectColumnIndex);
-//                //Display the values from each respective current column of the current row in the
-//                // cursor in the TextView.
-//                displayView.append(("\n" + currentId + " - " +
-//                        currentName + " - " +
-//                        currentSupplier + " - " +
-//                        currentSuppPh + " - " +
-//                        currentPrice + " - " +
-//                        currentQty + " - " +
-//                        currentSect));
-//                //Log cursor count to verify != null
-//                Log.v("CatalogActivity dispDB", "Cursor Count" + cursor.getCount());
-//            }
-//        } finally {
-//            //Always close the cursor when done reading from it. This releases all it's resources
-//            //and makes it invalid.
-//            cursor.close();
-//        }
-//    }
 
     /**
      * Helper method to insert hardcoded item data into database, for debugging purposes only.
@@ -228,7 +127,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             //Respond to "Insert Dummy Data" menu item selection
             case R.id.action_insert_dummy_data:
                 insertItem();
-                displayDatabaseInfo();
                 return true;
             //Respond to "Delete ALL Database Entries" menu item selection
             case R.id.action_delete_all_entries:
@@ -253,8 +151,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         mItemCursorAdapter.swapCursor(cursor);
-
-
     }
 
     @Override
@@ -262,6 +158,11 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         mItemCursorAdapter.swapCursor(null);
 
     }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        Cursor cursor = getContentResolver().query(CONTENT_URI, projection,null,null, TitleEntry._ID + " DESC");
+        mItemCursorAdapter.swapCursor(cursor);
+    }
 }
-
-

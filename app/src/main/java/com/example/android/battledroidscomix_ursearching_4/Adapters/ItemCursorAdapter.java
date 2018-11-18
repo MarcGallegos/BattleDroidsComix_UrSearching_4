@@ -1,8 +1,10 @@
 package com.example.android.battledroidscomix_ursearching_4.Adapters;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -19,6 +21,10 @@ import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.Tit
 // CursorAdapter is an adapter for Grid/ListView that uses a Cursor of Item Data as it's data source
 // This adapter knows how to create list items for each row of data in the Cursor.
 public class ItemCursorAdapter extends CursorAdapter {
+
+    //Global Variables used by Sale Button
+    private int quantityVar;
+    private int itemId;
 
     public ItemCursorAdapter(Context context, Cursor c) {
         super(context,c,0);
@@ -56,6 +62,7 @@ public class ItemCursorAdapter extends CursorAdapter {
         TextView product_price = view.findViewById(R.id.product_price);
         TextView product_quantity = view.findViewById(R.id.product_quantity);
         TextView product_section = view.findViewById(R.id.product_section);
+        Button saleButton = (Button)view.findViewById(R.id.sale);
 
         String name = cursor.getString(cursor.getColumnIndex(ComiContract.TitleEntry.COLUMN_PRODUCT_NAME));
         String supplier = cursor.getString(cursor.getColumnIndex(ComiContract.TitleEntry.COLUMN_SUPPLIER));
@@ -70,5 +77,33 @@ public class ItemCursorAdapter extends CursorAdapter {
         product_price.setText("Price: " + price);
         product_quantity.setText("In-Stock: " + quantity);
         product_section.setText("Section:" + section);
+
+        //Sale Button Listener Decrements Quantity
+        // Find position cursor is at
+        final  int position = cursor.getPosition();
+
+        //Set onClickListener for Sold Button to reflect a sale
+        saleButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //Set cursor to position of the button selected.
+                cursor.moveToPosition(position);
+                //Get item _ID for current row
+                itemId = cursor.getInt(cursor.getColumnIndex(TitleEntry._ID));
+                quantityVar = cursor.getInt(cursor.getColumnIndex(TitleEntry.COLUMN_QTY));
+
+                //IF quantity is greater than 0 decrease by 1 and update database and swap cursor out
+                if (quantityVar > 0){
+                    quantityVar = quantityVar -1;
+                    ContentValues values = new ContentValues();
+                    values.put(TitleEntry.COLUMN_QTY, quantityVar );
+
+                    Uri updateUri = ContentUris.withAppendedId(TitleEntry.CONTENT_URI, itemId);
+                    context.getContentResolver().update(updateUri, values, null, null);
+                    swapCursor(cursor);
+
+                }
+            }
+        });
     }
 }
