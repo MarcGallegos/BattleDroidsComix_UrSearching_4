@@ -74,7 +74,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
                 //Form the CONTENT_URI that represents the specific List item selected,
                 //by appending "id"(passed in as input) onto {@link TitleEntry.CONTENT_URI).
-                // e.g. the URI would be "content://com.example.android.battledroids_comix_ursearching_4/items/item2"
+                //e.g. the URI would be "content://com.example.android.battledroids_comix_ursearching_4/items/item2"
                 //if item 2 was selected from the list.
                 Uri currentItemUri = ContentUris.withAppendedId(TitleEntry.CONTENT_URI, id);
 
@@ -158,7 +158,12 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         mItemCursorAdapter.swapCursor(null);
 
     }
-    
+
+
+    // Credit to Project Coach Charles Rowland for assistance with this method:
+    // For some reason finish() is demanding onResume.
+    // I added this override in and just requeried and swapped the cursor, now
+    // ListView updates correctly.
     @Override
     public void onResume() {
         super.onResume();

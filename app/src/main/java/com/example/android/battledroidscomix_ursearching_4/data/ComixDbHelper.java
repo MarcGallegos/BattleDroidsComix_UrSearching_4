@@ -10,17 +10,24 @@ import com.example.android.battledroidscomix_ursearching_4.data.ComiContract.Tit
 public class ComixDbHelper extends SQLiteOpenHelper{
 
     public static final String LOG_TAG=ComixDbHelper.class.getSimpleName();
+
     /** Name of the Database file */
     private static final String DATABASE_NAME="items.db";
+
     /** Database version. If schema is changed DB version must be incremented */
     private static final int DATABASE_VERSION=1;
+
     /** Drop Existing Table String */
     private static final String SQL_DELETE_ENTRIES=
             "DROP TABLE IF EXISTS " + TitleEntry.TABLE_NAME;
+
     /** input_TYPE strings for SQL Statement */
     private static final String TEXT_TYPE=" TEXT";
+
     private static final String INT_TYPE=" INTEGER";
+
     private static final String REAL_TYPE=" REAL";
+
     /** Primary Key AutoIncrement String w/ comma separator for SQL statement */
     private static final String PRI_KEY_AUTOINCR=" PRIMARY KEY AUTOINCREMENT, ";
 
@@ -53,12 +60,10 @@ public class ComixDbHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion) {
         if (newVersion > oldVersion) {
-            //Do Nothing For Now as app is still version 1.
+            //Delete entries.
             db.execSQL(SQL_DELETE_ENTRIES);
             onCreate(db);
 
         }
     }
-
-
 }

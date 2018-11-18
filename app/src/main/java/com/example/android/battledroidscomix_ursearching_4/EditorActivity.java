@@ -331,7 +331,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             //Respond to a click on the "Save" menu option
             case R.id.action_save:
 
-
             // Save Product Entry to Database,
             // and exit- finish operation.
             saveItem();

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +38,7 @@ public class ItemCursorAdapter extends CursorAdapter {
      */
     @Override
     public View newView(Context context, Cursor cursor, @NonNull ViewGroup parent) {
+
         //Return List item View.
         return LayoutInflater.from(context).inflate(R.layout.item_construct, parent, false);
     }
@@ -62,7 +62,7 @@ public class ItemCursorAdapter extends CursorAdapter {
         TextView product_price = view.findViewById(R.id.product_price);
         TextView product_quantity = view.findViewById(R.id.product_quantity);
         TextView product_section = view.findViewById(R.id.product_section);
-        Button saleButton = (Button)view.findViewById(R.id.sale);
+        Button saleButton = view.findViewById(R.id.sale);
 
         String name = cursor.getString(cursor.getColumnIndex(ComiContract.TitleEntry.COLUMN_PRODUCT_NAME));
         String supplier = cursor.getString(cursor.getColumnIndex(ComiContract.TitleEntry.COLUMN_SUPPLIER));
@@ -86,8 +86,10 @@ public class ItemCursorAdapter extends CursorAdapter {
         saleButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {
+
                 //Set cursor to position of the button selected.
                 cursor.moveToPosition(position);
+
                 //Get item _ID for current row
                 itemId = cursor.getInt(cursor.getColumnIndex(TitleEntry._ID));
                 quantityVar = cursor.getInt(cursor.getColumnIndex(TitleEntry.COLUMN_QTY));

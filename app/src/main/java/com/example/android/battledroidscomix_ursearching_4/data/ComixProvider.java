@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
-
 public class ComixProvider extends ContentProvider {
 
     /**
@@ -135,18 +134,21 @@ public class ComixProvider extends ContentProvider {
 
         //This is for the name sanity check. It gets stored string value, passing in Prod. Name column key
         String name = values.getAsString(TitleEntry.COLUMN_PRODUCT_NAME);
+
         //This is for the supplier sanity check. Gets stored string val., passing in Supplier column key
         String supplier = values.getAsString(TitleEntry.COLUMN_SUPPLIER);
 
-        //This is for the supplier contact sanity check. Gets stored int. val., passing in Supplier Phone column key
+        //This is for the supplier contact sanity check. Gets stored String val., passing in Supplier Phone column key
         //contact needs to be a String
         String contact = values.getAsString(TitleEntry.COLUMN_SUPPLIER_PH);
 
-        //This is for the price sanity check. Gets stored int. val., passing in Price column key
+        //This is for the price sanity check. Gets stored double val., passing in Price column key
         //price needs to be a double
         double price = values.getAsDouble(TitleEntry.COLUMN_PRICE);
+
         //This is for the quantity sanity check. Gets stored int. val., passing in Quantity column key
         Integer quantity = values.getAsInteger(TitleEntry.COLUMN_QTY);
+
         //This is for the section sanity check. It gets stored int, passing in Section column key
         Integer section = values.getAsInteger(TitleEntry.COLUMN_SECTION);
 
@@ -216,6 +218,7 @@ public class ComixProvider extends ContentProvider {
             case ITEMS:
                 return updateItem(uri, contentValues, selection, selectionArgs);
             case ITEM_ID:
+
                 //For the ITEM_ID code, extract out the ID from the URI
                 //so we know which row to update. Selection will be "_id=?" and selection arguments
                 //will be a String Array containing the actual id.

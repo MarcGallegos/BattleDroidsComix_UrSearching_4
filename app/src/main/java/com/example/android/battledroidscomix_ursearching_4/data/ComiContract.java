@@ -100,8 +100,5 @@ public final class ComiContract {
         public static final int DRAMA = 4;
         public static final int FANTASY = 5;
         public static final int SCI_FI = 6;
-
-
-
     }
 }
