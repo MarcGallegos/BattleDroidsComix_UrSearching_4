@@ -291,12 +291,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     public String decrementQty(){
         int currentInventoryCount;
         String currentVal = mInventoryQtyEditText.getText().toString();
-        currentInventoryCount = Integer.parseInt(currentVal);
+
         if (TextUtils.isEmpty(currentVal)) {
             Toast.makeText(this, "Negative Quantity Not Allowed", Toast.LENGTH_LONG).show();
-            currentInventoryCount = 0;
+            return(currentVal);
+
         }else {
-            currentInventoryCount = currentInventoryCount - 1;
+            currentInventoryCount = Integer.parseInt(currentVal);
+            currentInventoryCount --;
         }
         return String.valueOf(currentInventoryCount);
 
