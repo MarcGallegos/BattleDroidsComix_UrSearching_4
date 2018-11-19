@@ -298,6 +298,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         }else {
             currentInventoryCount = Integer.parseInt(currentVal);
+            if(currentInventoryCount > 0)
             currentInventoryCount --;
         }
         return String.valueOf(currentInventoryCount);
