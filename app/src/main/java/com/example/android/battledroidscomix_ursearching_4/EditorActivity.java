@@ -292,7 +292,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         int currentInventoryCount;
         String currentVal = mInventoryQtyEditText.getText().toString();
         currentInventoryCount = Integer.parseInt(currentVal);
-        if (currentInventoryCount ==0) {
+        if (TextUtils.isEmpty(currentVal)) {
             Toast.makeText(this, "Negative Quantity Not Allowed", Toast.LENGTH_LONG).show();
             currentInventoryCount = 0;
         }else {
@@ -310,6 +310,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             currentInventoryCount = 0;
         }else{
             currentInventoryCount = Integer.parseInt(currentVal);
+            currentInventoryCount++;
         }
         return String.valueOf(currentInventoryCount);
     }
@@ -375,6 +376,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                     public void onClick(DialogInterface dialog, int id) {
                         //User selects "Delete Comic, then Delete at prompt"
                         fugThisItem();
+                        finish();
                     }
                 });
                 //User selects "cancel," dismiss dialog and continue editing item.
@@ -437,7 +439,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
-        CursorLoader cl = new CursorLoader(this, TitleEntry.CONTENT_URI, projection, null, null, TitleEntry._ID + " DESC");
+        CursorLoader cl = new CursorLoader(this, mCurrentProductUri, projection, null, null, TitleEntry._ID + " DESC");
         return cl;
     }
 

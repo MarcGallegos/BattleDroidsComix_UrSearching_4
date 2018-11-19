@@ -102,7 +102,6 @@ public class ItemCursorAdapter extends CursorAdapter {
 
                     Uri updateUri = ContentUris.withAppendedId(TitleEntry.CONTENT_URI, itemId);
                     context.getContentResolver().update(updateUri, values, null, null);
-                    swapCursor(cursor);
 
                 }
             }

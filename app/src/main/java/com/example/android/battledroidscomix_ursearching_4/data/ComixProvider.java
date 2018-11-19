@@ -90,6 +90,7 @@ public class ComixProvider extends ContentProvider {
                 //The cursor should contain all rows of the items table.
                 cursor = database.query(TitleEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
             case ITEM_ID:
                 // For the ITEM_ID code, extract out the ID from the URI.
@@ -104,6 +105,7 @@ public class ComixProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(ComiContract.TitleEntry.TABLE_NAME, projection, selection,
                         selectionArgs, null, null, sortOrder);
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
             default:
                 throw new IllegalArgumentException("Cannot query, unknown URI." + uri);
@@ -325,6 +327,11 @@ public class ComixProvider extends ContentProvider {
             case ITEMS:
                 //Delete all rows that match selection and selectionArgs.
                 rowsDeleted = database.delete(TitleEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case ITEM_ID:
+                selection = TitleEntry._ID + "=?";
+                selectionArgs = new  String[]{String.valueOf(ContentUris.parseId(uri))};
+                rowsDeleted = database.delete(TitleEntry.TABLE_NAME, selection, selectionArgs );
                 break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);

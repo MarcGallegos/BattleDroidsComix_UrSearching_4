@@ -159,15 +159,4 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     }
 
-
-    // Credit to Project Coach Charles Rowland for assistance with this method:
-    // For some reason finish() is demanding onResume.
-    // I added this override in and just requeried and swapped the cursor, now
-    // ListView updates correctly.
-    @Override
-    public void onResume() {
-        super.onResume();
-        Cursor cursor = getContentResolver().query(CONTENT_URI, projection,null,null, TitleEntry._ID + " DESC");
-        mItemCursorAdapter.swapCursor(cursor);
-    }
 }
